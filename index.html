@@ -109,7 +109,7 @@ details summary{min-height:36px;display:flex;align-items:center;cursor:pointer}
 <script>
 /* ============ STORAGE ============ */
 const KEY='englishMaster.v1';
-const DEF={lang:'mn',theme:'auto',done:{},best:{},tasks:{},mins:{},days:[],log:[],wrong:[],fav:[],srs:{},writing:{},pass:70};
+const DEF={lang:'mn',theme:'auto',goal:240,done:{},best:{},tasks:{},mins:{},days:[],log:[],wrong:[],fav:[],srs:{},writing:{},pass:70};
 let S=JSON.parse(JSON.stringify(DEF));
 try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'));}catch(e){}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
@@ -687,10 +687,11 @@ function finishQuiz(){
 }
 
 /* ============ TASKS ============ */
+function taskMin(t){return Math.max(5,Math.round(t.m*S.goal/240));}
 function toggleTask(d,k){
  S.tasks[d]=S.tasks[d]||{};const t=TASKS.find(x=>x.k===k);
  const v=!S.tasks[d][k];S.tasks[d][k]=v;
- if(t)addMins(t.m,v?1:-1);
+ if(t)addMins(taskMin(t),v?1:-1);
  if(v)touch();
 }
 function playAll(d){if(!('speechSynthesis' in window)){toast('Audio not supported');return;}speechSynthesis.cancel();LESSONS[d-1].p.forEach(p=>speakQ(p[0]));}
@@ -721,7 +722,7 @@ function homeV(){
   <button class="btn" data-act="open" data-d="${d}">${tr('cont')}</button>
  </div>
  <div class="grid2">
-  <div class="stat"><div class="mut sm">${tr('time')}</div><div class="v">${tm} ${tr('mins')}</div><div class="bar"><i style="width:${Math.min(100,Math.round(tm/240*100))}%"></i></div><div class="mut sm">${tr('goal')}</div></div>
+  <div class="stat"><div class="mut sm">${tr('time')}</div><div class="v">${tm} ${tr('mins')}</div><div class="bar"><i style="width:${Math.min(100,Math.round(tm/S.goal*100))}%"></i></div><div class="mut sm">${tr('goal')}: ${S.goal} ${tr('mins')}</div></div>
   <div class="stat"><div class="mut sm">${tr('total')}</div><div class="v">${done}</div></div>
   <div class="stat"><div class="mut sm">${tr('gram')}</div><div class="v">${Math.round(done/60*100)}%</div></div>
   <div class="stat"><div class="mut sm">${tr('vocP')}</div><div class="v">${Math.round(mastered()/VOCAB.length*100)}%</div></div>
@@ -747,7 +748,7 @@ function lessonsV(){
 function lessonHTML(d){
  const L0=LESSONS[d-1],st=S.tasks[d]||{},sc=S.done[d];
  const pairs=arr=>arr.map(([e,m])=>`<div class="ex"><div class="exrow"><b>${esc(e)}</b><button class="sp" data-act="say" data-t="${esc(e)}">🔊</button></div><div class="mut sm">${esc(m)}</div></div>`).join('');
- const tasksH=TASKS.map(t=>`<div class="task"><div><b>${esc(tn(t))}</b><div class="mut sm">${t.m} ${tr('mins')}</div></div><button class="chk ${st[t.k]?'on':''}" data-act="task" data-k="${t.k}">${st[t.k]?'✓':''}</button></div>`).join('');
+ const tasksH=TASKS.map(t=>`<div class="task"><div><b>${esc(tn(t))}</b><div class="mut sm">${taskMin(t)} ${tr('mins')}</div></div><button class="chk ${st[t.k]?'on':''}" data-act="task" data-k="${t.k}">${st[t.k]?'✓':''}</button></div>`).join('');
  const prevOk=d>1,nextOk=d<60&&unlocked(d+1);
  return `
  <div class="row between">
@@ -902,6 +903,8 @@ function settingsV(){
    <div class="seg">${[['auto',tr('auto')],['light',tr('light')],['dark',tr('dark')]].map(([k,l])=>`<button class="${S.theme===k?'on':''}" data-act="set" data-k="theme" data-v="${k}">${l}</button>`).join('')}</div></div>
   <div class="card"><h3>${tr('pass')}</h3><div class="mut sm">A1: 85% · B1+</div>
    <div class="seg">${[60,70,80,85].map(v=>`<button class="${S.pass===v?'on':''}" data-act="set" data-k="pass" data-v="${v}">${v}%</button>`).join('')}</div></div>
+  <div class="card"><h3>Өдрийн зорилтот цаг</h3><div class="mut sm">Өдрийн даалгаврын минут энэ цагт тааруулан өөрчлөгдөнө</div>
+   <div class="seg">${[30,60,120,240].map(v=>`<button class="${S.goal===v?'on':''}" data-act="set" data-k="goal" data-v="${v}">${v} ${tr('mins')}</button>`).join('')}</div></div>
   <div class="card"><h3>${tr('install')}</h3><p class="sm mut">${tr('installT')}</p></div>
   <div class="card"><button class="btn" style="background:#dc2626" data-act="reset">${tr('reset')}</button></div>`;
 }
@@ -945,7 +948,7 @@ function act(a,d){
   case 'vfilter':vFilter=d.v;nextCard();break;
   case 'flip':flipped=!flipped;break;
   case 'rate':{if(card){srsUpdate(card.en,d.ok==='1');}nextCard();break;}
-  case 'set':{S[d.k]=d.k==='pass'?+d.v:d.v;break;}
+  case 'set':{S[d.k]=(d.k==='pass'||d.k==='goal')?+d.v:d.v;break;}
   case 'reset':if(confirm(tr('reset')+'?')){localStorage.removeItem(KEY);S=JSON.parse(JSON.stringify(DEF));openDay=null;Q=null;toast(tr('resetOk'));}break;
   case 'lang':S.lang=S.lang==='mn'?'en':'mn';break;
  }
