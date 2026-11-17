@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="English Master">
+<link rel="manifest" href="manifest.json">
+<title>English Master</title>
+<style>
+:root{--bg:#f4f5fb;--card:#fff;--fg:#1b1d2a;--mut:#6b7086;--accent:#4f46e5;--acc2:#06b6d4;--chip:#e9e9f5;--ok:#16a34a;--bad:#dc2626;--line:#e3e5f0}
+body.dark{--bg:#0f1220;--card:#1a1e33;--fg:#eef0ff;--mut:#9aa0bf;--accent:#7c79ff;--chip:#262b47;--line:#2c3150}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;background:var(--bg);color:var(--fg);-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+.app{display:flex;flex-direction:column;height:100vh;height:100dvh}
+.top{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 8px}
+.top h1{font-size:20px;margin:0}
+main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 16px 24px}
+main>*{animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+nav{display:grid;grid-template-columns:repeat(6,1fr);background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{background:none;border:0;color:var(--mut);min-height:56px;font-size:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0}
+nav .ic{font-size:20px;line-height:1}
+nav button.on{color:var(--accent);font-weight:600}
+input,textarea,select{font-size:16px;font-family:inherit;color:var(--fg);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%}
+textarea{min-height:90px}
+.card{background:var(--card);border-radius:18px;padding:16px;margin:0 0 12px;box-shadow:0 2px 10px rgba(0,0,0,.05);border:1px solid var(--line)}
+.hero{background:linear-gradient(135deg,#4f46e5,#06b6d4);color:#fff;border:0}
+.hero .mut{color:#e0e7ff}
+.center{text-align:center}
+h2{font-size:22px;margin:8px 0 2px}
+h3{margin:8px 0}
+.mut{color:var(--mut)}
+.sm{font-size:13px}
+.big{font-size:34px;font-weight:700;margin:6px 0}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.between{justify-content:space-between}
+.btn{min-height:46px;border-radius:14px;border:0;background:var(--accent);color:#fff;font-size:16px;font-weight:600;padding:0 16px;width:100%;margin:4px 0;display:block}
+.btn.alt{background:var(--chip);color:var(--fg)}
+.btn.sm{width:auto;min-height:34px;font-size:14px;padding:0 12px;margin:0}
+.btn:disabled{opacity:.45}
+.pill{display:inline-block;background:var(--chip);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.seg button{flex:1;min-width:60px;min-height:40px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:14px}
+.seg button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}
+.stat .v{font-size:20px;font-weight:700}
+.bar{height:8px;background:var(--chip);border-radius:8px;overflow:hidden;margin:6px 0}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--acc2))}
+.ex{padding:10px 0;border-bottom:1px solid var(--line)}
+.ex:last-child{border-bottom:0}
+.exrow{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.sp{background:var(--chip);border:0;border-radius:10px;min-width:40px;min-height:36px;font-size:16px;color:var(--fg)}
+.formula{font-family:ui-monospace,Menlo,monospace;background:var(--chip);padding:10px;border-radius:12px;font-size:14px;white-space:pre-wrap}
+.task{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.task:last-child{border-bottom:0}
+.chk{width:42px;height:42px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:#fff;font-size:20px;font-weight:700}
+.chk.on{background:var(--ok);border-color:var(--ok)}
+.row-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:8px;width:100%;text-align:left;color:var(--fg);min-height:56px}
+.num{width:38px;height:38px;border-radius:12px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-weight:700;flex:0 0 38px}
+.num.d{background:var(--ok);color:#fff}
+.num.c{background:var(--accent);color:#fff}
+.lk{opacity:.5}
+.opt{display:block;width:100%;text-align:left;min-height:50px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--fg);font-size:16px;padding:10px 14px;margin:6px 0}
+.opt.ok{border-color:var(--ok);background:rgba(22,163,74,.15)}
+.opt.bad{border-color:var(--bad);background:rgba(220,38,38,.12)}
+.chip{display:inline-block;border-radius:12px;border:0;background:var(--accent);color:#fff;padding:9px 12px;margin:4px;font-size:16px}
+.chip.alt{background:var(--chip);color:var(--fg)}
+.build{min-height:52px;border-bottom:2px dashed var(--line);padding:6px 0;margin-bottom:10px}
+.fb{border-radius:14px;padding:12px;margin:10px 0;border:1px solid var(--line)}
+.fb.good{background:rgba(22,163,74,.12);border-color:var(--ok)}
+.fb.bad{background:rgba(220,38,38,.1);border-color:var(--bad)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom,0px) + 80px);background:#111;color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.toast.show{opacity:1}
+.cal{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}
+.cal button{aspect-ratio:1;border-radius:8px;border:0;font-size:11px;background:var(--chip);color:var(--fg);padding:0}
+.cal .d{background:var(--ok);color:#fff}
+.cal .c{outline:2px solid var(--accent)}
+.cal .l{opacity:.35}
+.badges{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.badge{border-radius:14px;padding:10px;background:var(--chip);font-size:13px}
+.badge.on{background:linear-gradient(135deg,#fde68a,#f59e0b);color:#111}
+.flashcard{min-height:200px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+details summary{min-height:36px;display:flex;align-items:center;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <h1>English Master</h1>
+    <button class="btn alt sm" data-act="lang" id="langBtn" style="width:auto;margin:0"></button>
+  </header>
+  <main id="view"></main>
+  <nav id="nav">
+    <button data-act="tab" data-t="home"><span class="ic">🏠</span><span data-l="home"></span></button>
+    <button data-act="tab" data-t="lessons"><span class="ic">📘</span><span data-l="lessons"></span></button>
+    <button data-act="tab" data-t="vocab"><span class="ic">🔤</span><span data-l="vocab"></span></button>
+    <button data-act="tab" data-t="practice"><span class="ic">✏️</span><span data-l="practice"></span></button>
+    <button data-act="tab" data-t="progress"><span class="ic">📊</span><span data-l="progress"></span></button>
+    <button data-act="tab" data-t="settings"><span class="ic">⚙️</span><span data-l="settings"></span></button>
+  </nav>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ STORAGE ============ */
+const KEY='englishMaster.v1';
+const DEF={lang:'mn',theme:'auto',done:{},best:{},tasks:{},mins:{},days:[],log:[],wrong:[],fav:[],srs:{},writing:{},pass:70};
+let S=JSON.parse(JSON.stringify(DEF));
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||'{}'));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+
+/* ============ LABELS ============ */
+const T={
+mn:{home:'Нүүр',lessons:'Хичээл',vocab:'Үг',practice:'Дасгал',progress:'Ахиц',settings:'Тохиргоо',
+ welcome:'Тавтай морил!',level:'Түвшин',dayN:'Өдөр',today:'Өнөөдрийн хичээл',cont:'Үргэлжлүүлэх',
+ time:'Өнөөдрийн цаг',total:'Дууссан хичээл',gram:'Дүрмийн ахиц',vocP:'Үгсийн ахиц',avg:'Шалгалтын дундаж',
+ streak:'Идэвхтэй streak',back:'Буцах',start:'Шалгалт эхлүүлэх',next:'Дараах',check:'Шалгах',finish:'Дуусгах',
+ search:'Үг хайх...',all:'Бүгд',fav:'★ Дуртай',list:'Жагсаалт',cards:'Карт',know:'Мэдлээ',again:'Дахин',
+ flip:'Эргүүлэх',pass:'Тэнцэх оноо',reset:'Ахиц устгах',lang:'Хэл',theme:'Загвар',auto:'Систем',light:'Цайвар',dark:'Харанхуй',
+ tasks:'Өдрийн даалгавар',formula:'Томьёо',expl:'Тайлбар',exs:'Эерэг өгүүлбэр',negs:'Үгүйсгэх өгүүлбэр',ques:'Асуулт',mist:'Түгээмэл алдаа',
+ quiz:'Шалгалт',mix:'Долоо хоногийн шалгалт',lvl:'Түвшний шалгалт',vq:'Үгийн тест',wrong:'Алдсан хариултууд',
+ badges:'Амжилтын тэмдэг',levels:'Түвшний явц',weak:'Сул сэдвүүд',cal:'60 өдрийн календарь',recent:'Сүүлийн шалгалтууд',
+ done:'Дууссан',lock:'Түгжээтэй',correct:'Зөв',wrongA:'Буруу',rightAns:'Зөв хариулт',
+ sayAll:'Бүгдийг сонсох',repeat:'Дуудлага сонсох',write:'Өгүүлбэр бичих',save:'Хадгалах',
+ result:'Үр дүн',retry:'Дахин оролдох',exit:'Гарах',prev:'Өмнөх',nextDay:'Дараагийн өдөр',
+ install:'Дэлгэцэнд нэмэх',installT:'iPhone дээр: Safari → Share → Add to Home Screen',
+ mins:'мин',noneWrong:'Алдсан хариулт алга.',vmas:'Мэдсэн үг',sess:'Өнөөдрийн цаг',goal:'зорилт 240 мин',
+ saved:'Хадгаллаа',resetOk:'Ахиц устгагдлаа',listen:'Сонсолт',read:'Уншлага',speak:'Ярианы дасгал',
+ gramT:'Дүрэм',vocT:'Үг',writeT:'Бичлэг',listenT:'Сонсолт',readT:'Уншлага',speakT:'Ярианы дасгал',
+ prevDay:'Өмнөх өдөр',today2:'Өнөөдөр',lvlNeed:'Түвшний бүх хичээлийг дуусгах хэрэгтэй',
+ weekly:'Долоо хоногийн тойм',ok:'Тэнцлээ!',tryAgain:'Дахин оролдоно уу',yourAns:'Таны хариулт',
+ pick:'Үгсийг зөв дарааллаар дарна уу',writeHint:'Түлхүүр үгийг ашиглан англи өгүүлбэр бичнэ үү.',
+ cardsDone:'Өнөөдрийн карт дууссан ✅',noRecent:'Шалгалт хийгээгүй байна.',pct:'Хувь',
+ vqTitle:'Үгийн тест (10)',mixTitle:'Долоо хоногийн шалгалт (10)',
+ coded:'Тэмдэглэл'},
+en:{home:'Home',lessons:'Lessons',vocab:'Vocabulary',practice:'Practice',progress:'Progress',settings:'Settings',
+ welcome:'Welcome!',level:'Level',dayN:'Day',today:"Today's lesson",cont:'Continue Learning',
+ time:"Today's study time",total:'Completed lessons',gram:'Grammar progress',vocP:'Vocabulary progress',avg:'Average quiz score',
+ streak:'Learning streak',back:'Back',start:'Start quiz',next:'Next',check:'Check',finish:'Finish',
+ search:'Search words...',all:'All',fav:'★ Favorites',list:'List',cards:'Flashcards',know:'Know it',again:'Again',
+ flip:'Flip',pass:'Pass score',reset:'Reset progress',lang:'Language',theme:'Theme',auto:'System',light:'Light',dark:'Dark',
+ tasks:"Today's tasks",formula:'Formula',expl:'Explanation',exs:'Positive examples',negs:'Negative examples',ques:'Questions',mist:'Common mistakes',
+ quiz:'Quiz',mix:'Weekly review quiz',lvl:'Level exam',vq:'Vocabulary quiz',wrong:'Review wrong answers',
+ badges:'Achievement badges',levels:'Level progression',weak:'Weak topics',cal:'60-day calendar',recent:'Recent quizzes',
+ done:'Done',lock:'Locked',correct:'Correct',wrongA:'Wrong',rightAns:'Correct answer',
+ sayAll:'Play all',repeat:'Play sample',write:'Write a sentence',save:'Save',
+ result:'Result',retry:'Retry',exit:'Exit',prev:'Previous',nextDay:'Next day',
+ install:'Add to Home Screen',installT:'On iPhone: Safari → Share → Add to Home Screen',
+ mins:'min',noneWrong:'No wrong answers saved.',vmas:'Mastered words',sess:"Today's time",goal:'goal 240 min',
+ saved:'Saved',resetOk:'Progress reset',listen:'Listening',read:'Reading',speak:'Speaking',
+ gramT:'Grammar',vocT:'Vocabulary',writeT:'Writing',listenT:'Listening',readT:'Reading',speakT:'Speaking',
+ prevDay:'Previous day',today2:'Today',lvlNeed:'Finish all lessons in this level first',
+ weekly:'Weekly review',ok:'Passed!',tryAgain:'Try again',yourAns:'Your answer',
+ pick:'Tap the words in the correct order',writeHint:'Write an English sentence using the keyword.',
+ cardsDone:'Today’s cards are done ✅',noRecent:'No quizzes taken yet.',pct:'Score',
+ vqTitle:'Vocabulary quiz (10)',mixTitle:'Weekly review quiz (10)',
+ coded:'Notes'}
+};
+function tr(k){return (T[S.lang]&&T[S.lang][k])||T.mn[k]||k;}
+
+/* ============ CONSTANTS ============ */
+const LEVELS=['A1','A2','B1','B2','C1','C2'];
+const TASKS=[
+ {k:'grammar',m:60,mn:'Дүрэм судлах',en:'Grammar study'},
+ {k:'vocab',m:45,mn:'Үг яаж ойлгох',en:'Vocabulary study'},
+ {k:'listen',m:35,mn:'Сонсолт',en:'Listening'},
+ {k:'read',m:35,mn:'Уншлага',en:'Reading'},
+ {k:'speak',m:35,mn:'Ярианы дасгал',en:'Speaking'},
+ {k:'write',m:30,mn:'Бичлэг',en:'Writing'}];
+const tn=o=>S.lang==='en'?o.en:o.mn;
+const POS={n:'Нэр үг',v:'Үйл үг',adj:'Тэмдэгт нэр',adv:'Үйлт үг'};
+
+/* ============ LESSONS (60 days) ============ */
+function L(d,en,mn,f,x,p,n,q,b,fx,k){return{d,en,mn,f,x,p,n,q,b,fx,k,lv:LEVELS[Math.floor((d-1)/10)]};}
+const LESSONS=[
+L(1,'Alphabet & Pronunciation','Англи алфавит ба дуудлага','26 үсэг · IPA: /æ/ /ɪ/ /ʌ/ гэх мэт',
+ 'Англи хэлэнд 26 үсэг байдаг. Үсгийн нэр болон дуудлага ихэвчлэн өөр байдаг тул IPA тэмдэглэгээг ашиглан дуудлагыг сурна.',
+ [['I am a student.','Би оюутан.'],['Nice to meet you.','Танд уулзсандаа баяртай байна.'],['Hello, my name is Anna.','Сайн байна уу, миний нэр Анна.']],
+ ['I am not a teacher.','Би багш биш.'],['What is your name?','Таны нэр хэн бэ?'],
+ ['Hello, my ___ is Tom.','name','age','home'],
+ ['The letter A is pronounced like ah.','The letter A is pronounced like ay /eɪ/.','Англи үсгийн нэр болон дуудлага ихэвчлэн өөр байдаг.'],'name'),
+L(2,'Parts of Speech','Үгийн төрлүүд','Noun · Verb · Adjective · Adverb · Pronoun · Preposition · Conjunction · Article',
+ 'Англи үгийг найман төрөлд хуваадаг. Нэр үг нь хүн, зүйлийн нэр; үйл үг нь үйлдэл; тэмдэгт нэр нь нэрийг тодорхойлно; үйлт үг нь үйлийг тодорхойлно.',
+ [['She runs quickly.','Тэр хурдан гүйдэг.'],['The book is interesting.','Ном сонирхолтой.'],['They eat bread and milk.','Тэд талх, сүү иднэ.']],
+ ['The book interesting is.','Буруу дараалал: үгийн байрлал буруу байна.'],['What part of speech is quickly?','quickly ямар үгийн төрөл вэ?'],
+ ['She ___ very fast.','runs','running','quickly'],
+ ['Quick is an adverb.','Quick is an adjective; quickly is an adverb.','Тэмдэгт нэр нэрийг, үйлт үг үйлийг тодорхойлно.'],'quickly'),
+L(3,'Nouns & Singular / Plural','Нэр үг · Ганц ба олон тоо','book → books · box → boxes · baby → babies · child → children',
+ 'Нэр үгийн олон тоог -s, -es, -ies залгаж гаргана. Зарим нэр үг (child, man, woman) тусгай хэлбэртэй байдаг.',
+ [['I have a book.','Надад ном бий.'],['There are two cats.','Хоёр муур байна.'],['The children are happy.','Хүүхдүүд баяртай байна.']],
+ ['I have two book.','Буруу: олон тоонд books гэж бичнэ.'],['Two boxes are on the table.','Хоёр хайрцаг ширээн дээр байна.'],
+ ['There are three ___ on the table.','books','book','bookes'],
+ ['two box','two boxes','Олон тоонд -x, -s дуусгавартай үгэнд -es залгана.'],'books'),
+L(4,'Pronouns','Төлөөний үг','Субьект: I, you, he, she, it, we, they · Объект: me, you, him, her, it, us, them',
+ 'Субьект төлөөний үг өгүүлбэрийн эхэнд орж үйлдэл хийгчийг заана. Объект төлөөний үг үйлийн ард орж хүлээн авагчийг заана.',
+ [['He likes music.','Тэр хөгжим дуртай.'],['They are my friends.','Тэд миний найзууд.'],['Please give it to her.','Үүнийг түүнд өгөөч.']],
+ ['Her is happy.','Буруу: субьект байрлалд she хэрэглэнэ.'],['Where is my bag? I cannot find it.','Миний цүнх хаана байна? Би олохгүй байна.'],
+ ['___ is my sister.','She','Her','Hers'],
+ ['Her is a teacher.','She is a teacher.','Субьектийн байрлалд she/he, объектийн байрлалд her/him хэрэглэнэ.'],'she'),
+L(5,'Verbs & To Be (am / is / are)','Үйл үг · To be','I am · he/she/it is · we/you/they are',
+ 'To be үйл үг нь тухайн субьектээр өөрчлөгдөнө. Ерөнхий үйл үг (work, go) нь present simple-д -s залгана.',
+ [['I am tired today.','Би өнөөдөр ядарсан.'],['She is at school.','Тэр сургууль дээр байна.'],['We are good friends.','Бид сайн найзууд.']],
+ ['I am not tired.','Би ядраагүй.'],['They are very kind.','Тэд маш эелдэг.'],
+ ['She ___ a doctor.','is','are','am'],
+ ['She are a doctor.','She is a doctor.','She-ийн дараа is хэрэглэнэ.'],'is'),
+L(6,'Adjectives & Adverbs','Тэмдэгт нэр ба үйлт үг','Adj + noun: a big house · Adverb: sings beautifully',
+ 'Тэмдэгт нэр нэрийг тодорхойлно. Үйлт үг (ихэвчлэн -ly) үйлийг тодорхойлно.',
+ [['The house is big.','Байшин том.'],['She sings beautifully.','Тэр гоё дуулдаг.'],['He is a very good cook.','Тэр маш сайн тогооч.']],
+ ['She sings beautiful.','Буруу: үйлийг тодорхойлох үйлт үг хэрэгтэй.'],['He drives carefully.','Тэр болгоомжтой жолоодлого хийдэг.'],
+ ['He speaks ___ English.','fluently','fluent','fluency'],
+ ['She sings beautiful.','She sings beautifully.','Үйл үгийг тодорхойлохдоо үйлт үг (-ly) хэрэглэнэ.'],'beautifully'),
+L(7,'Articles: a, an, the','Өгүүлэгдэхүүн: a, an, the','a + consonant sound · an + vowel sound · the = тодорхой',
+ 'a нь эгшгээр эхлэхгүй үгийн өмнө, an нь эгшгийн дуутай үгийн өмнө орно. the нь аль нэгийг тодорхойлоход хэрэглэнэ.',
+ [['I have a dog.','Надад нэг нохой бий.'],['She is an engineer.','Тэр инженер.'],['The sun is hot today.','Өнөөдөр нар халуун байна.']],
+ ['I am an university student.','Буруу: a university гэх ёстой (y-ийн дуу [j]).'],['Can you pass me the salt?','Давсыг надад өгөхгүй юу?'],
+ ['She is ___ honest person.','an','a','the'],
+ ['He is a hour late.','He is an hour late.','hour-ийн h дуугүй тул an хэрэглэнэ.'],'the'),
+L(8,'Demonstratives','Заах үгс','this / these (ойрхон) · that / those (холвогор)',
+ 'this, that нь ганц тоо; these, those нь олон тоо. Ойрхон байгаа зүйлд this/these, холын зүйлд that/those хэрэглэнэ.',
+ [['This is my book.','Энэ миний ном.'],['Those are my shoes over there.','Тэр дээр нь миний гутлууд.'],['These apples are fresh.','Эдгээр алимнууд шинэ.']],
+ ['This are my keys.','Буруу: олон тоонд these are гэж хэлнэ.'],['Is that your car?','Тэр таны машин уу?'],
+ ['___ flowers are beautiful.','These','This','That'],
+ ['This are my keys.','These are my keys.','Олон тооны үед these/those хэрэглэнэ.'],'this'),
+L(9,'Have / Has & There is / are','Have/has · There is/are','I/you/we/they have · he/she/it has · There is (ганц) · There are (олон)',
+ 'have, has нь эзэмших утгатай. There is/are нь байгаа зүйлийг илэрхийлнэ; тоонд тохирч is эсвэл are хэрэглэнэ.',
+ [['I have two brothers.','Би хоёр ахтай.'],['She has a new bike.','Тэр шинэ дугуйтай.'],['There are five chairs in the room.','Өрөөнд таван сандал байна.']],
+ ['There is many people.','Буруу: олон тоонд There are гэж хэлнэ.'],['Does he have a car?','Тэр машинтай юу?'],
+ ['She ___ a blue bag.','has','have','having'],
+ ['There is many people.','There are many people.','Олон тооны нэр үгийн өмнө are хэрэглэнэ.'],'has'),
+L(10,'Present Simple & Present Continuous','Одоогийн энгийн ба үргэлжилж буй','Simple: I work every day · Continuous: I am working now',
+ 'Present simple нь давтагддаг үйлийг заана. Present continuous нь одоо болж буй үйлийг заана (am/is/are + -ing).',
+ [['I drink coffee every morning.','Би өглөө бүр кофе уудаг.'],['She is reading a book now.','Тэр одоо ном уншиж байна.'],['They play football on Sundays.','Тэд ням гарагт хөл бөмбөг тоглодог.']],
+ ['She no like tea.','Буруу: She does not like tea.'],['Are you listening to me?','Та намайг сонсож байна уу?'],
+ ['Right now, he ___ TV.','is watching','watches','watch'],
+ ['He watching TV every day.','He watches TV every day.','Давтагддаг үйлд simple, одоо болж буйд continuous хэрэглэнэ.'],'usually'),
+L(11,'Past Simple','Өнгөрсөн цагийн энгийн','Regular: worked (+ed) · Irregular: went, saw, had',
+ 'Өнгөрсөн цагийн үйлийг илэрхийлнэ. Дүрэм үйл үгэнд -ed залгана; олон үйл үг тусгай хэлбэртэй. Үгүйсгэх үед did not + суурь хэлбэр.',
+ [['I visited my grandmother last week.','Би өнгөрсөн долоо хоногт эмээгээ зочилсон.'],['She went to Paris in 2019.','Тэр 2019 онд Парист явсан.'],['We watched a movie yesterday.','Бид өчигдөр кино үзсэн.']],
+ ['I didn’t went home.','Буруу: I didn’t go home.'],['Did you call your friend?','Та найзаа дуудсан уу?'],
+ ['Yesterday I ___ a letter.','wrote','write','writing'],
+ ['I didn’t went home.','I didn’t go home.','didn’t-ийн дараа үйл үгийн суурь хэлбэр орно.'],'yesterday'),
+L(12,'Past Continuous','Өнгөрсөн цагийн үргэлжилж буй','was/were + verb-ing',
+ 'Өнгөрсөн тодорхой цагт үргэлжилж байсан үйлийг илэрхийлнэ. Бусад үйлтэй зэрэгцэн орвол while, when ашиглана.',
+ [['I was reading when you called.','Чи залгахад би ном уншиж байсан.'],['They were playing outside at noon.','Тэд үд дунд гадаа тоглож байсан.'],['She was cooking dinner at 7 pm.','Тэр 19 цагт оройн хоол хийж байсан.']],
+ ['I was not sleeping.','Би унтаж байгаагүй.'],['Were you working at 9?','Та 9 цагт ажиллаж байсан уу?'],
+ ['At 8 o’clock, I ___ dinner.','was cooking','cooked','cook'],
+ ['I cooked when you called.','I was cooking when you called.','Үргэлжилж буй үйлд was/were + -ing хэрэглэнэ.'],'while'),
+L(13,'Future Simple (will)','Ирээдүйн энгийн (will)','will + суурь үйл үг',
+ 'Яриа явцад шийдвэр гаргах, амлалт өгөх, таамаглах үед will хэрэглэнэ.',
+ [['I will call you tomorrow.','Би маргааш чамд залгана.'],['She will be here soon.','Тэр удахгүй энд байна.'],['They will win the match.','Тэд тоглолтыг хожно.']],
+ ['I won’t go tomorrow.','Би маргааш явахгүй. (won’t = will not)'],['Will it rain today?','Өнөөдөр бороо орох уу?'],
+ ['I think it ___ sunny tomorrow.','will be','is will be','being'],
+ ['I will to go.','I will go.','will-ийн дараа "to" орохгүй.'],'will'),
+L(14,'Going To','Going to','am/is/are going to + суурь үйл үг',
+ 'Урьдчилан төлөвлөсөн үйлийг эсвэл одоогийн нотолгоонд суурилсан таамаглалыг илэрхийлнэ.',
+ [['I am going to study tonight.','Би өнөө орой суралцахаар төлөвлөсөн.'],['It is going to rain.','Бороо орох нь.'],['We are going to visit Japan next year.','Бид ирэх жил Япон руу айлчлахаар төлөвлөсөн.']],
+ ['He going to buy a car.','Буруу: He is going to buy a car.'],['Are you going to join us?','Та бидэнтэй нэгдэх үү?'],
+ ['Look at the clouds! It ___ rain.','is going to','will go','goes'],
+ ['He going to buy.','He is going to buy.','Going to-д am/is/are хэрэгтэй.'],'going'),
+L(15,'Present Perfect','Одоогийн төгссөн цаг','have/has + past participle (done, been, gone)',
+ 'Өнгөрсөн цагт болсон ба одоо ач холбогдолтой үйлийг илэрхийлнэ. Тодорхой цаг заахгүй (yesterday биш).',
+ [['I have visited London twice.','Би Лондонд хоёр удаа очсон.'],['She has lived here since 2015.','Тэр 2015 оноос хойш энд амьдарч байна.'],['We have just finished lunch.','Бид саяхан өдрийн хоолоо дуусгасан.']],
+ ['I have went to Japan.','Буруу: I have been to Japan.'],['Have you ever tried sushi?','Та суши идэж үзсэн үү?'],
+ ['She ___ already eaten.','has','have','was'],
+ ['I have went there.','I have been there.','go-ийн participle нь gone/been.'],'already'),
+L(16,'Countable & Uncountable Nouns','Тоологддог ба тоологддоггүй нэр','apples (тоологдоно) · water, information (тоологдохгүй)',
+ 'Тоологддог нэр үгийг тоолж болно. Тоологддоггүй нэр үгийг тоолохгүй; some, much ашиглана.',
+ [['I need some water.','Надад ус хэрэгтэй.'],['There are many apples.','Олон алим бий.'],['She gave me some advice.','Тэр надад зөвлөгөө өгсөн.']],
+ ['I need some informations.','Буруу: information тоологдохгүй.'],['How much money do you have?','Танд хичнээн мөнгө байна?'],
+ ['Can you give me some ___?','information','informations','an information'],
+ ['I need some informations.','I need some information.','information нь тоологдохгүй нэр үг.'],'water'),
+L(17,'Some / Any & Much / Many','Some/any · Much/many','some (эерэг) · any (сөрөг, асуулт) · many (тоологдоно) · much (тоологдохгүй)',
+ 'Эерэг өгүүлбэрт some, асуулт ба үгүйсгэлтэд any хэрэглэнэ. Тоологдох нэр үгэнд many, тоологдохгүйд much хэрэглэнэ.',
+ [['I have some friends here.','Энд надад хэдэн найз бий.'],['There isn’t any milk.','Сүү байхгүй.'],['How many books do you have?','Танд хэдэн ном бий?']],
+ ['I have much friends.','Буруу: many friends.'],['Do you have any questions?','Танд асуулт байна уу?'],
+ ['How ___ sugar do you need?','much','many','any'],
+ ['I have much friends.','I have many friends.','Тоологддог нэр үгтэй many хэрэглэнэ.'],'many'),
+L(18,'Prepositions of Time & Place','Цаг ба байршлын угтвар','in (сар, жил, улс) · on (гараг, өдөр) · at (цаг, тодорхой газар)',
+ 'in, on, at нь цаг ба байршлыг заах угтвар юм. Жил, сарын өмнө in, гараг, огнооны өмнө on, цагийн өмнө at хэрэглэнэ.',
+ [['I was born in 1995.','Би 1995 онд төрсөн.'],['The meeting is on Monday.','Уулзалт даваа гарагт.'],['She will meet you at 5 pm.','Тэр чамтай 17 цагт уулзана.']],
+ ['The meeting is in Monday.','Буруу: The meeting is on Monday.'],['Where is the bank?','Банк хаана байна?'],
+ ['The keys are ___ the table.','on','in','at'],
+ ['The meeting is in Monday.','The meeting is on Monday.','Гариг, өдрийн өмнө on хэрэглэнэ.'],'on'),
+L(19,'Comparatives & Superlatives','Харьцуулалт ба дээд зэрэг','bigger / the biggest · more expensive / the most expensive · better / the best',
+ 'Богино үгэнд -er, -est залгана. Урт үгэнд more, the most ашиглана. good → better → best тусгай хэлбэртэй.',
+ [['My house is bigger than yours.','Миний байшин чинийхээс том.'],['This is the most beautiful place.','Энэ бол хамгийн гоё газар.'],['Tom is taller than his brother.','Том ахаасаа өндөр.']],
+ ['This is more better.','Буруу: better.'],['Which is the cheapest option?','Аль нь хамгийн хямд сонголт вэ?'],
+ ['He is ___ than me.','taller','more tall','tallest'],
+ ['This is more better.','This is better.','good-ийн харьцуулах хэлбэр better.'],'than'),
+L(20,'Modal Verbs','Туслах модаль үйл үг','can/could (чадвар) · must/should (шаардлага, зөвлөгөө) · may/might (магадлал)',
+ 'Модаль үйл үгийн дараа "to" орохгүй, мөн үйл үгийн суурь хэлбэр орно. Нэг модаль үгийг дараалан хэрэглэхгүй.',
+ [['I can swim very well.','Би маш сайн сэлж чадна.'],['You should see a doctor.','Та эмчид үзүүлэх хэрэгтэй.'],['It might rain later.','Дараа нь бороо орох магадлалтай.']],
+ ['She can to drive.','Буруу: She can drive.'],['Must I wear a uniform?','Би дүрэмт хувцас өмсөх ёстой юу?'],
+ ['You ___ wear a helmet.','must','musted','to must'],
+ ['She can to drive.','She can drive.','Модаль үйл үгийн дараа "to" орохгүй.'],'should'),
+L(21,'Present Perfect Continuous','Одоогийн төгссөн үргэлжилж буй','have/has been + verb-ing',
+ 'Өнгөрснөөс одоо хүртэл үргэлжилж буй үйлийг илэрхийлнэ. Хугацаа заахдаа since, for ашиглана.',
+ [['I have been studying English for two years.','Би хоёр жилийн турш англи хэл сурч байна.'],['She has been waiting since noon.','Тэр үдээс хойш хүлээж байна.'],['They have been working all day.','Тэд өдөржин ажиллаж байна.']],
+ ['I have been study since morning.','Буруу: have been studying.'],['How long have you been living here?','Та энд хэдий хугацаанд амьдарч байна вэ?'],
+ ['It ___ since morning.','has been raining','has rained','is raining'],
+ ['I have been study English.','I have been studying English.','Үргэлжилж буй үйлд -ing хэрэглэнэ.'],'since'),
+L(22,'Past Perfect','Өнгөрсөн цагийн төгссөн','had + past participle',
+ 'Хоёр өнгөрсөн үйлийн эхнийхийг илэрхийлнэ. Хэд хэдэн өнгөрсөн үйлийн аль нь өмнө болсныг харуулна.',
+ [['When I arrived, the film had already started.','Би ирэхэд кино аль хэдийн эхэлчихсэн байсан.'],['She had lost her keys before she came.','Тэр ирэхээсээ өмнө түлхүүрээ алдчихсан байсан.'],['They had never seen snow before.','Тэд өмнө нь цас хэзэг харж үзээгүй байсан.']],
+ ['He had went home.','Буруу: He had gone home.'],['Had you finished before he came?','Тэр ирэхээс өмнө та дууссан уу?'],
+ ['By 2010 she ___ to Paris.','had moved','moved','has moved'],
+ ['He had went home.','He had gone home.','had-ын дараа participle (gone) орно.'],'had'),
+L(23,'Future Continuous','Ирээдүйн үргэлжилж буй','will be + verb-ing',
+ 'Ирээдүйн тодорхой цагт үргэлжилж байх үйлийг заана.',
+ [['This time tomorrow I will be flying to Tokyo.','Маргааш энэ цагт би Токио руу нисэж явж байна.'],['She will be working at 9 am.','Тэр өглөөний 9 цагт ажиллаж байх болно.'],['They will be waiting for you.','Тэд чамайг хүлээж байх болно.']],
+ ['I will be go tomorrow.','Буруу: I will be going.'],['Will you be using the car tonight?','Та өнөө орой машин ашиглаж байх уу?'],
+ ['At 6 pm tomorrow, I ___ .','will be working','will work','am working'],
+ ['I will be go.','I will be going.','will be + -ing.'],'will be'),
+L(24,'Future Perfect','Ирээдүйн төгссөн','will have + past participle',
+ 'Ирээдүйн тодорхой цаг хүртэл дууссан байх үйлийг илэрхийлнэ.',
+ [['By next year I will have finished my degree.','Ирэх жил гэхэд би сургуулиа төгссөн байх болно.'],['She will have left by 8 pm.','Тэр 20 цаг гэхэд явчихсан байх болно.'],['They will have built the house by June.','Тэд 6-р сар гэхэд байшингаа барьчихсан байх болно.']],
+ ['I will have finish it.','Буруу: finished.'],['Will you have completed the report by Friday?','Та баасан гараг гэхэд тайлангаа дуусгасан байх уу?'],
+ ['By the time you arrive, I ___ dinner.','will have cooked','will cook','have cooked'],
+ ['I will have finish it.','I will have finished it.','will have-ийн дараа participle.'],'by'),
+L(25,'Gerunds','Нэрлэсэн -ing үйл үг','enjoy + -ing · finish + -ing · stop + -ing',
+ 'Gerund (-ing) нь үйлийг нэр мэт илэрхийлнэ. Зарим үйл үгийн дараа зөвхөн -ing орно (enjoy, finish, mind, suggest).',
+ [['I enjoy reading books.','Би ном уншихад таатай.'],['He stopped smoking last year.','Тэр өнгөрсөн жил тамхи татахаа больсон.'],['Do you mind helping me?','Надад туслахад та дургүйцэх үү?']],
+ ['She enjoys to dance.','Буруу: She enjoys dancing.'],['Do you mind helping me?','Надад туслахад та дургүйцэх үү?'],
+ ['She is good at ___ English.','speaking','to speak','speak'],
+ ['She enjoys to dance.','She enjoys dancing.','enjoy-ийн дараа -ing хэрэглэнэ.'],'enjoy'),
+L(26,'Infinitives','Infinitive (to + үйл үг)','want to · decide to · hope to',
+ 'Infinitive нь to + суурь үйл үг бүтэцтэй. Зорилго, хүсэл, шийдвэрийг илэрхийлэхэд ихэвчлэн хэрэглэнэ.',
+ [['She wants to learn French.','Тэр франц хэл сурахыг хүсдэг.'],['I decided to leave early.','Би эрт явахаар шийдсэн.'],['We hope to see you soon.','Бид удахгүй танд уулзахыг хүсч байна.']],
+ ['She wants learning French.','Буруу: She wants to learn French.'],['What do you plan to do?','Та юу хийхээр төлөвлөж байна вэ?'],
+ ['I decided ___ early.','to leave','leaving','leave to'],
+ ['She wants learning French.','She wants to learn French.','want-ийн дараа to + суурь үйл үг орно.'],'decided'),
+L(27,'Passive Voice','Бүтээлийн тушаах','be + past participle',
+ 'Үйлдэл хийгчээс илүү хүлээн авагчид төвлөрөх үед passive ашиглана. Tense нь be-ийн хэлбэрээр тодорхойлогдоно.',
+ [['The letter was written yesterday.','Захидлыг өчигдөр бичсэн.'],['English is spoken in many countries.','Англи хэлийг олон оронд ярьдаг.'],['The bridge will be finished next year.','Гүүрийг ирэх жил барьж дуусгана.']],
+ ['The letter was write.','Буруу: was written.'],['Was the window broken?','Цонх эвдэрсэн үү?'],
+ ['The room ___ every day.','is cleaned','cleans','is clean'],
+ ['The letter was write.','The letter was written.','Passive-д participle хэлбэр орно.'],'was'),
+L(28,'Conditionals 0–2','Нөхцөлт өгүүлбэр 0–2','0: If + present, present · 1: If + present, will · 2: If + past, would',
+ 'Type 0 нь үнэн дүрмийг, Type 1 нь бодит ирээдүйг, Type 2 нь бодит бус одоо/ирээдүйг илэрхийлнэ.',
+ [['If you heat water, it boils.','Ус халааваас буцалдаг.'],['If it rains, I will stay home.','Хэрэв бороо орвол би гэртээ байна.'],['If I had money, I would travel.','Хэрэв мөнгөтэй байсан бол аялах байсан.']],
+ ['If it will rain, I stay.','Буруу: If it rains, I will stay.'],['What would you do if you won the lottery?','Сугалаа хожвол та юу хийх вэ?'],
+ ['If I ___ time, I will help you.','have','will have','had'],
+ ['If it will rain, I stay.','If it rains, I will stay.','If-д орсон өгүүлбэрт present simple (will биш) хэрэглэнэ.'],'if'),
+L(29,'Reported Speech','Шууд бус яриа','said that · told me that · will → would · present → past',
+ 'Бусдын үгийг өөрийн үгээр дахин хэлэхэд цаг нэг шат ухарна. say-ийн дараа хүн орохгүй, tell-ийн дараа хүн орно.',
+ [['He said that he was tired.','Тэр ядарсан гэж хэлсэн.'],['She told me she lived in Ulaanbaatar.','Тэр надад Улаанбаатарт амьдардаг гэж хэлсэн.'],['They said they would come later.','Тэд дараа ирнэ гэж хэлсэн.']],
+ ['He said me he is tired.','Буруу: He told me that he was tired.'],['She asked where I lived.','Тэр намайг хаана амьдардаг гэж асуусан.'],
+ ['He said he ___ busy.','was','is','be'],
+ ['He said me he is tired.','He told me he was tired.','say-ийн дараа хүн орохгүй, tell-ийн дараа хүн орно.'],'said'),
+L(30,'Relative Clauses','Харьцангуй өгүүлбэр','who (хүн) · which (зүйл) · that · whose · where',
+ 'Харьцангуй өгүүлбэр нь нэр үгийг тодорхойлно. Хүнд who, зүйлд which, газарт where хэрэглэнэ.',
+ [['The man who called you is my father.','Чамд залгасан хүн миний аав.'],['This is the book which I bought.','Энэ бол миний худалдаж авсан ном.'],['I know a town where people are friendly.','Хүмүүс эелдэг тосгоныг би мэднэ.']],
+ ['The woman who I saw her is kind.','Буруу: The woman I saw is kind.'],['Is that the house where you were born?','Тэр таныг төрсөн байшин уу?'],
+ ['The girl ___ lives next door is my friend.','who','which','whose'],
+ ['The woman who I saw her is kind.','The woman I saw is kind.','Давхар субьект хэрэглэхгүй.'],'who'),
+L(31,'Third Conditional','Гурав дахь нөхцөлт','If + had + past participle, would have + past participle',
+ 'Өнгөрсөн бодит бус нөхцөл, өнгөрсөн үр дүнг илэрхийлнэ. Харамсал илэрхийлэхэд хэрэглэнэ.',
+ [['If I had studied, I would have passed.','Хэрэв би суралцсан бол тэнцэх байсан.'],['If she had left earlier, she would have caught the train.','Тэр эрт явсан бол галт тэрэгэнд амжих байсан.'],['We would have helped if you had asked.','Хэрэв асуусан бол бид тусалсан байх байсан.']],
+ ['If I had known, I would went.','Буруу: I would have gone.'],['What would you have done if you had been there?','Хэрэв тэнд байсан бол та юу хийх байсан бэ?'],
+ ['If he ___ earlier, he would have met her.','had arrived','arrived','has arrived'],
+ ['If I had known, I would went.','If I had known, I would have gone.','Өнгөрсөн нөхцөлд would have + participle.'],'would have'),
+L(32,'Mixed Conditionals','Холимог нөхцөлт','If + had + p.p., would + verb (өнгөрсөн шалтгаан → одоогийн үр дагавар)',
+ 'Өнгөрсөн нөхцөл нь одоогийн үр дүнд нөлөөлсөн үед холимог нөхцөлт хэрэглэнэ.',
+ [['If I had studied harder, I would be a doctor now.','Хэрэв илүү хичээсэн бол одоо эмч байх байсан.'],['If she were more careful, she wouldn’t have lost her wallet.','Тэр илүү анхаарлтай байсан бол түрийвчээ алдахгүй байсан.'],['If I had taken that job, I would be rich today.','Тэр ажлыг авсан бол өнөөдөр баян байх байсан.']],
+ ['If I had studied, I am a doctor now.','Буруу: I would be a doctor now.'],['Would you be happier if you had moved abroad?','Гадаад руу нүүсэн бол та илүү аз жаргалтай байх уу?'],
+ ['If I had listened, I ___ so happy now.','would be','will be','was'],
+ ['If I had studied, I am a doctor now.','If I had studied, I would be a doctor now.','Өнгөрсөн шалтгаан, одоогийн үр дагавар.'],'now'),
+L(33,'Advanced Passive','Дэвшилтэт passive','it is said that · he is believed to · is reported to',
+ 'Мэдээлэл, таамаглалыг бүтэцтэйгээр илэрхийлэхэд passive-ийн тусгай хэлбэрүүдийг хэрэглэнэ.',
+ [['He is believed to be living in Canada.','Тэр Канадад амьдарч байгаа гэж үздэг.'],['The problem is thought to have been caused by a virus.','Асуудлыг вирус үүсгэсэн гэж үздэг.'],['She is said to speak five languages.','Тэр таван хэл ярьдаг гэдэг.']],
+ ['He is believe to be rich.','Буруу: He is believed to be rich.'],['Is the building expected to be finished soon?','Барилга удахгүй дуусах гэж найдаж байна уу?'],
+ ['The thief is thought ___ the city.','to have left','to left','having left'],
+ ['He is believe to be rich.','He is believed to be rich.','Passive-д participle (believed) хэрэглэнэ.'],'believed'),
+L(34,'Modal Perfects','Модаль үйл үгийн төгссөн хэлбэр','should have · could have · might have + past participle',
+ 'Өнгөрсөн үйлийн талаар харамсах, таамаглах, шүүмжлэх үед модаль + have + participle хэрэглэнэ.',
+ [['You should have told me earlier.','Та надад эрт хэлэх ёстой байсан.'],['She could have won the race.','Тэр уралдааныг хожиж чадах байсан.'],['He might have forgotten the meeting.','Тэр уулзалтаа мартсан байж магадгүй.']],
+ ['You should have tell me.','Буруу: told.'],['Could they have missed the bus?','Тэд автобусыг алдсан байж болох уу?'],
+ ['I ___ the window. It was open.','should have closed','should closed','have should closed'],
+ ['You should have tell me.','You should have told me.','Модаль perfect-д participle хэрэглэнэ.'],'should have'),
+L(35,'Causative','Causative (have/get something done)','have/get + object + past participle',
+ 'Өөрөө хийхгүй, хэн нэгэнд хийлгэх үед causative ашиглана.',
+ [['I had my hair cut yesterday.','Би өчигдөр үсээ засуулсан.'],['She is getting her car repaired.','Тэр машинаа засуулж байна.'],['We had the roof painted last summer.','Бид дээврээ будуулсан.']],
+ ['She didn’t get her car fixed.','Тэр машинаа засуулаагүй.'],['Did you have the windows cleaned?','Та цонхоо угааж засуулсан уу?'],
+ ['I need to ___ my computer repaired.','get','do','make'],
+ ['I need to do my computer repaired.','I need to get my computer repaired.','Хэн нэгэнд хийлгэх утгатай үед get/have хэрэглэнэ.'],'have'),
+L(36,'Reduced Relative Clauses','Товчилсон харьцангуй өгүүлбэр','who is standing → standing · which was written → written',
+ 'Харьцангуй өгүүлбэрийн who/which is хэсгийг орхиж, -ing эсвэл participle болгон товчилж болно.',
+ [['The man standing there is my uncle.','Тэнд зогсож буй хүн миний нагац ах.'],['Students invited to the party should bring a gift.','Үдэшлэгт урьсан оюутнууд бэлэг авч ирэх хэрэгтэй.'],['The book written by him is famous.','Түүний бичсэн ном алдартай.']],
+ ['The man standing there is who my uncle.','Буруу: The man standing there is my uncle.'],['Anyone who saw the accident should call the police.','Осолыг харсан хэн ч цагдаа дуудах ёстой.'],
+ ['The people ___ in the queue are waiting.','standing','stand','stood'],
+ ['The people is waiting in the queue.','The people standing in the queue are waiting.','Идэвхтэй утгатай бол -ing, идэвхгүй бол participle.'],'standing'),
+L(37,'Participle Clauses','Participle өгүүлбэр','Having finished… · Tired after work… · Built in 1900…',
+ 'Participle clause нь хоёр үйлийг товчилж хэлэх арга. Хоёр өгүүлбэрийн субьект ижил байх ёстой.',
+ [['Having finished my homework, I went to bed.','Гэрийн даалгавраа дуусгаад би унтахаар орсон.'],['Tired after work, he fell asleep.','Ажлын дараа ядарч тэр унтчихсан.'],['Built in 1900, the castle is now a museum.','1900 онд баригдсан шилтгээн одоо музей болсон.']],
+ ['Finish homework, I went to bed.','Буруу: Having finished homework…'],['Walking along the river, we saw a bird.','Голын дагуу алхаж явахад бид шувуу харсан.'],
+ ['___ the door, she turned off the light.','Closing','Closed','To close'],
+ ['Finish homework, I went to bed.','Having finished homework, I went to bed.','Нэг субьектийн үйлдлийг товчилсон.'],'having'),
+L(38,'Phrasal Verbs','Хосолмол үйл үг','give up · look after · put off · turn off',
+ 'Үйл үг ба угтвар хамтдаа шинэ утга үүсгэнэ. Утгыг нь цээжилж, өгүүлбэрт хэрэглэх нь чухал.',
+ [['Don’t give up on your dreams.','Мөрөөдлөө бүү орхи.'],['Can you look after my dog tonight?','Өнөө орой миний нохойг харж чадах уу?'],['They decided to put off the meeting.','Тэд уулзалтаа хойшлуулахаар шийдсэн.']],
+ ['I look forward to see you.','Буруу: to seeing you.'],['Please turn off the light when you leave.','Гарахдаа гэрлээ унтраана уу.'],
+ ['I need to ___ my grandmother this weekend.','look after','look for','look into'],
+ ['I look forward to see you.','I look forward to seeing you.','to-ийн дараа -ing орно (look forward to).'],'turn'),
+L(39,'Wish & If Only','Хүсэл ба харамсал (wish, if only)','wish + past simple (одоо) · wish + past perfect (өнгөрсөн) · wish + would',
+ 'Одоогийн бодит бус хүслийг past simple-ээр, өнгөрсөн харамсалыг past perfect-ээр илэрхийлнэ.',
+ [['I wish I had more time.','Надад илүү цаг байгаасай.'],['If only I had listened to you!','Чиний хэлснийг сонсвол ямар сайхан байсан бэ!'],['I wish you would stop talking.','Чи ярихаа больчихвол сайн байна.']],
+ ['I wish I have a car.','Буруу: I wish I had a car.'],['Do you wish you lived closer to the city?','Та хотод ойр амьдардаг байсан бол гэж хүсдэг үү?'],
+ ['I wish I ___ speak French.','could','can','will'],
+ ['I wish I have a car.','I wish I had a car.','Одоогийн хүслийг past simple-ээр илэрхийлнэ.'],'wish'),
+L(40,'Question Tags','Асуух нэмэлт (question tags)','эерэг → сөрөг tag · сөрөг → эерэг tag',
+ 'Өгүүлбэрийн төгсгөлд tag нэмж баталгаажуулах асуулт үүсгэнэ. Tag нь үндсэн өгүүлбэрийн эсрэг туйлтай байна.',
+ [['You are coming, aren’t you?','Чи ирж байгаа биз дээ?'],['She can’t swim, can she?','Тэр сэлж чадахгүй шүү дээ?'],['Let’s go, shall we?','Явъя, за юу?']],
+ ['You are coming, are you?','Буруу: aren’t you?'],['It is cold today, isn’t it?','Өнөөдөр хүйтэн байна, тийм ээ?'],
+ ['He works here, ___ ?','doesn’t he','isn’t he','does he'],
+ ['You are coming, are you?','You are coming, aren’t you?','Tag нь эерэг/сөрөг эсрэг байна.'],'isn’t'),
+L(41,'Inversion','Үгийн дараалал солих (inversion)','Never have I seen… · Not only did she… · Rarely do we…',
+ 'Сөрөг утгатай adverbial өгүүлбэрийн эхэнд орвол үйл үг субьектээс өмнө орно. Энэ нь илүү албан ёсны бичгийн хэлбэр юм.',
+ [['Never have I seen such a beautiful view.','Ийм сайхан харагдахыг би хэзээ ч харж үзээгүй.'],['Not only did he win, but he also set a record.','Тэр зөвхөн хожсонгүй, шинэ дээд амжилт тогтоосон.'],['Rarely do people admit their mistakes so openly.','Хүмүүс алдаагаа ийм илэн далангүй хүлээдэггүй.']],
+ ['Never I have seen this.','Буруу: Never have I seen this.'],['Hardly had she arrived when the phone rang.','Тэр ирэх дороо утас дуугарав.'],
+ ['Not only ___ the exam, but she also got top marks.','did she pass','she passed','she did pass'],
+ ['Never I have seen this.','Never have I seen this.','Сөрөг adverbial эхэнд орвол inversion хэрэглэнэ.'],'never'),
+L(42,'Cleft Sentences','Онцолсон өгүүлбэр (cleft)','It was X who… · What I need is…',
+ 'Өгүүлбэрийн нэг хэсгийг онцлохын тулд it is/was…that эсвэл What…is бүтэц ашиглана.',
+ [['It was Maria who solved the problem.','Асуудлыг шийдсэн нь Мария байсан.'],['What I really want is a holiday.','Миний үнэхээр хүсч буй зүйл бол амралт.'],['It is the price that worries me.','Намайг санаа зовоодог зүйл бол үнэ.']],
+ ['What I want is it is a holiday.','Буруу: What I want is a holiday.'],['Was it the teacher who called you?','Чамд залгасан нь багш байсан уу?'],
+ ['It was Tom ___ broke the vase.','who','which','whom'],
+ ['What I want is it is a holiday.','What I want is a holiday.','Cleft-д давхар "is it" орохгүй.'],'what'),
+L(43,'Subjunctive','Subjunctive (шаардлага, санал)','suggest / demand / insist that + subject + base verb',
+ 'Санал, шаардлага, захиалгын дараах that-өгүүлбэрт субьектээс хамаарахгүй суурь үйл үг орно.',
+ [['I suggest that he take a break.','Би түүнд амрах хэрэгтэй гэж зөвлөж байна.'],['The doctor insisted that she rest.','Эмч тэр амрах ёстой гэж шаардсан.'],['It is essential that everyone be on time.','Бүгд цагтаа ирэх нь чухал.']],
+ ['I suggest that he takes a break.','Буруу: take.'],['They demanded that the report be submitted today.','Тайлангаа өнөөдөр өгөхийг тэд шаардсан.'],
+ ['I recommend that she ___ early.','leave','leaves','left'],
+ ['I suggest that he takes a break.','I suggest that he take a break.','Subjunctive-д суурь үйл үг хэрэглэнэ.'],'suggest'),
+L(44,'Nominalisation','Нэрлэсэн хэлбэр болгох (nominalisation)','develop → development · decide → decision · complete → completion',
+ 'Үйл үг, тэмдэгт нэрийг нэр үг болгон өгүүлбэрийг албан ёсны болгоно. Бичгийн хэлэнд ихэвчлэн хэрэглэнэ.',
+ [['The development of the city took ten years.','Хотын хөгжилд арван жил зарцуулсан.'],['Her decision surprised everyone.','Түүний шийдвэр бүгдийг гайхшруулсан.'],['Education is important for economic growth.','Боловсрол эдийн засгийн өсөлтөд чухал.']],
+ ['Her decide surprised everyone.','Буруу: Her decision surprised everyone.'],['What was the main cause of the failure?','Бүтэлгүйтлийн гол шалтгаан юу байв?'],
+ ['The ___ of the project was delayed.','completion','complete','completely'],
+ ['The complete of the project was delayed.','The completion of the project was delayed.','Үйл үгийн нэр (completion) хэрэглэнэ.'],'decision'),
+L(45,'Complex Noun Phrases','Нарийн нэрлэсэн бүтэц','the newly introduced tax policy · the government’s long-term plan',
+ 'Олон тодорхойлогчтой нэрийн бүтцэд тодорхойлогч нь нэрийн өмнө, тэдгээрийн дараалал тодорхой байна.',
+ [['The newly introduced tax policy affects small businesses.','Шинээр нэвтрүүлсэн татварын бодлого жижиг бизнест нөлөөлнө.'],['The government’s long-term economic development plan was approved.','Засгийн газрын урт хугацааны эдийн засгийн хөгжлийн төлөвлөгөө батлагдсан.'],['A widely respected scientist gave the opening lecture.','Олон нийтэд хүндэтгэлтэй эрдэмтэн нээлтийн лекцээ уншсан.']],
+ ['The tax policy newly affects small business.','Буруу: үгийн дараалал.'],['Which noun phrase is the subject here?','Энд аль нэр үгийн хэсэг субьект вэ?'],
+ ['The ___ meeting was cancelled.','emergency','emergently','emergence'],
+ ['The meeting emergency was cancelled.','The emergency meeting was cancelled.','Тодорхойлогч үг нэрийн өмнө орно.'],'newly'),
+L(46,'Advanced Linking Devices','Дэвшилтэт холбоос үгс','however · nevertheless · moreover · consequently',
+ 'Өмнөх ба дараагийн санааг холбоход linking adverb ашиглана. Өмнө нь (;) эсвэл цэг хэрэгтэй.',
+ [['The plan was risky; nevertheless, we tried it.','Төлөвлөгөө эрсдэлтэй байсан ч бид туршиж үзсэн.'],['Moreover, the results were confirmed by two studies.','Үүнээс гадна үр дүнг хоёр судалгаа баталсан.'],['Consequently, prices rose sharply.','Үүний үр дүнд үнэ огцом өссөн.']],
+ ['The plan was risky, nevertheless we tried.','Буруу: цэг таслал эсвэл (;) хэрэгтэй.'],['What does however show in a sentence?','However өгүүлбэрт юуг илэрхийлдэг вэ?'],
+ ['The data were incomplete; ___, the study continued.','however','because','although'],
+ ['The plan was risky, nevertheless we tried.','The plan was risky; nevertheless, we tried.','Linking adverb-ын өмнө (;) хэрэглэнэ.'],'however'),
+L(47,'Advanced Modal Verbs','Дэвшилтэт модаль үйл үг','must have (таамаглал) · needn’t (шаардлагагүй) · might well · ought to',
+ 'Модаль үгс нь таамаглал, шаардлага, хориг, магадлалыг илүү нарийн илэрхийлнэ. mustn’t (хориглох) ба needn’t (шаардлагагүй) ялгаатай.',
+ [['She must have forgotten the appointment.','Тэр цагаа мартсан байх.'],['You needn’t bring anything to the party.','Үдэшлэгт юу ч авч ирэх хэрэггүй.'],['He might well be right about the risk.','Эрсдлийн талаар тэр зөв байж магадгүй.']],
+ ['You needn’t come, but you must be late.','Буруу утга: хоцрох ёсгүй.'],['Ought we to tell them now?','Бид одоо тэдэнд хэлэх ёстой юу?'],
+ ['He ___ be at home; his car is outside.','must','needs','ought'],
+ ['You needn’t come, but you must be late.','You needn’t come, but you mustn’t be late.','mustn’t = хориглох, needn’t = шаардлагагүй.'],'must'),
+L(48,'Fronting','Онцолсон эхний байрлал (fronting)','This film I really enjoyed. · Quiet is the town at night.',
+ 'Онцлох санаагаа өгүүлбэрийн эхэнд тавьж онцолно. Ихэвчлэн объект, тэмдэгт нэр, эсвэл adverbial орно.',
+ [['This film I really enjoyed.','Энэ киног би үнэхээр таалагдсан.'],['Happy she was not with the result.','Үр дүнд тэр баяртай байгаагүй.'],['Such was her courage that everyone admired her.','Түүний зоригийг бүгд биширдэг байв.']],
+ ['Film this I really enjoyed.','Буруу: This film I really enjoyed.'],['Which book did you buy?','Та аль номыг худалдаж авсан бэ?'],
+ ['Quiet ___ the town at night.','is','it is','does'],
+ ['Film this I really enjoyed.','This film I really enjoyed.','Fronting-д онцлох объектыг эхэнд тавина.'],'this'),
+L(49,'Ellipsis','Товчлол (ellipsis)','I didn’t go, but she did. · Will you help? I hope so.',
+ 'Давтагдсан үгийг орхиж өгүүлбэрийг товчилдог. Эерэг/сөрөг утга, дүрэм, цагийг зөв хадгалах хэрэгтэй.',
+ [['Some people like coffee, and others tea.','Зарим хүн кофе, бусад нь цай дуртай.'],['Will you help? I hope so.','Тусалж чадах уу? Тийм гэж найдаж байна.'],['He can speak French, and I can too.','Тэр франц хэлээр ярьж чадна, би ч мөн адил.']],
+ ['I didn’t go, but she didn’t.','Буруу утга: she did.'],['Does she like coffee? Yes, she does.','Тэр кофе дуртай юу? Тийм, дуртай.'],
+ ['I didn’t go, but she ___.','did','didn’t','does'],
+ ['I didn’t go, but she didn’t.','I didn’t go, but she did.','Эерэг/сөрөг утгыг зөв хадгалах хэрэгтэй.'],'so'),
+L(50,'C1 Mixed Review','C1 нэгдсэн давтлага','Inversion · Cleft · Subjunctive · Fronting · Ellipsis',
+ 'Өмнөх C1 сэдвүүдийг нэгтгэн давтана. Бичгийн болон ярианы түвшинд зөв хэрэглэх чадвар бэхэжинэ.',
+ [['Had I known, I would have come.','Мэдсэн бол би ирэх байсан.'],['It is vital that she be informed.','Түүнд мэдэгдэх нь чухал.'],['Little did they know what awaited them.','Тэдэнд юу хүлээж буйг огт мэдээгүй байв.']],
+ ['Had I known, I would come.','Буруу: would have come.'],['Have you read the report? I have.','Тайланг уншсан уу? Тийм, уншсан.'],
+ ['Only then ___ the truth.','did she realise','she realised','she did realise'],
+ ['Had I known, I would come.','Had I known, I would have come.','Ирээгүй нөхцөлд would have + participle.'],'had'),
+L(51,'Advanced Inversion','Дэвшилтэт inversion','Under no circumstances should… · No sooner had… than…',
+ 'Онцгой утгатай adverbial-ийн дараа inversion хэрэглэнэ. Бичгийн болон албан ёсны илэрхийлэлд их тохирно.',
+ [['Under no circumstances should you open the door.','Ямар ч нөхцөлд та хаалгыг нээх ёсгүй.'],['No sooner had we arrived than it started raining.','Бид ирэнгүүт бороо орж эхэлсэн.'],['Scarcely had I sat down when the bell rang.','Би суухтай зэрэг хонх дуугарав.']],
+ ['No sooner we had arrived than it rained.','Буруу: No sooner had we arrived.'],['Only after the meeting did she understand.','Уулзалтын дараа л тэр ойлгосон.'],
+ ['Scarcely ___ the room when the lights went out.','had I entered','I had entered','did I enter'],
+ ['No sooner we had arrived.','No sooner had we arrived.','Inversion: had + subject.'],'scarcely'),
+L(52,'Advanced Subjunctive','Дэвшилтэт subjunctive','Were I you… · Be that as it may… · I would rather you didn’t…',
+ 'Албан ёсны ба уран сайхны хэлэнд were, be ашиглан бодит бус нөхцөл, зөвшөөрөл, хүсэл илэрхийлнэ.',
+ [['Were I you, I would apologise.','Хэрвээ би чи байсан бол уучлалт гуйх байсан.'],['Be that as it may, we must continue.','Тэр ямар ч байсан бид үргэлжлүүлэх ёстой.'],['I would rather you didn’t tell anyone.','Чи хэнд ч хэлээгүй байвал дээр байна.']],
+ ['If I was you, I would apologise.','Формал хэлбэрт Were I you гэж хэлнэ.'],['Were he to resign, the company would suffer.','Тэр огцорвол компани хохирох байсан.'],
+ ['Were it not ___ your help, we would fail.','for','of','to'],
+ ['If I was you, I would apologise.','Were I you, I would apologise.','Албан ёсны хэлбэрт were ашиглана.'],'were'),
+L(53,'Advanced Ellipsis','Дэвшилтэт товчлол','She is taller than I (am). · If possible (it should be) done…',
+ 'Харьцуулалт, нөхцөл, зэрэгцүүлэлт дэх давтагдсан хэсгийг орхиж болно. Албан бичигт бүтнээр нь хэлэх нь илүү тохиромжтой байж болно.',
+ [['Although (she was) tired, she kept working.','Ядарсан ч тэр ажлаа үргэлжлүүлсэн.'],['If possible, it should be done today.','Боломжтой бол өнөөдөр хийх ёстой.'],['The results were better than expected.','Үр дүн хүлээснээс сайн байв.']],
+ ['She is taller than me is.','Буруу: than I am.'],['Is it ready? Almost.','Бэлэн үү? Бараг бэлэн.'],
+ ['He is more talented than ___ .','I am','me','I'],
+ ['She is taller than me is.','She is taller than I am.','Тэгшитгэлийн үед бүтэн хэлбэр хэрэглэнэ.'],'although'),
+L(54,'Advanced Conditionals','Дэвшилтэт нөхцөлт','Should you need help… · Had it not been for… · Were it to rain…',
+ 'Нөхцөлийн if-ийг орхиж, subject-verb inversion хийж болно. Албан ёсны нөхцөлт илэрхийлэл юм.',
+ [['Should you need help, call me.','Хэрэв тусламж хэрэгтэй бол над руу залга.'],['Had it not been for your advice, I would have failed.','Таны зөвлөгөө байгаагүй бол би бүтэлгүйтэх байсан.'],['Were it to rain, we would cancel the picnic.','Хэрэв бороо орвол бид зугаалгаа цуцлах байсан.']],
+ ['Had it not been for you, I would fail.','Буруу: would have failed.'],['What would happen if the power failed?','Цахилгаан тасарвал юу болох вэ?'],
+ ['___ you need any help, let me know.','Should','Had','Were'],
+ ['Had it not been for you, I would fail.','Had it not been for you, I would have failed.','Өнгөрсөн нөхцөлд would have.'],'should'),
+L(55,'Parallel Structures','Параллель бүтэц','to swim, to run and to cycle · reading, writing and painting',
+ 'Жагсаалт ба холбоос үгээр холбосон бүрэлдэхүүн хэсгүүд ижил дүрэмтэй байх ёстой.',
+ [['She likes reading, writing, and painting.','Тэр ном уншихад, бичихэд, зурахад дуртай.'],['He wants to travel, to learn, and to grow.','Тэр аялах, сурах, өсөхийг хүсдэг.'],['The plan is clear, simple, and effective.','Төлөвлөгөө тодорхой, энгийн, үр дүнтэй.']],
+ ['She likes reading, to write, and painting.','Буруу: бүгд -ing байх ёстой.'],['Which sentence is parallel?','Аль өгүүлбэр параллель бүтэцтэй вэ?'],
+ ['He is smart, funny, and ___ .','kind','kindness','kindly'],
+ ['She likes reading, to write, and painting.','She likes reading, writing, and painting.','Жагсаалтын бүх зүйл ижил хэлбэртэй байна.'],'and'),
+L(56,'Emphasis','Онцолсон илэрхийлэл (emphasis)','do/does/did + verb · It is… that… · such / so',
+ 'Үнэнийг онцлохын тулд do/does/did-ийг үндсэн үйл үгийн өмнө нэмнэ. Онцлох тэмдэгт үг (really, truly) ч хэрэглэж болно.',
+ [['I do believe you are right.','Би чиний зөв гэдэгт үнэхээр итгэж байна.'],['She did finish the project on time!','Тэр төслөө цагтаа үнэхээр дуусгасан!'],['It was such a wonderful day!','Ямар гайхалтай өдөр байсан бэ!']],
+ ['I believe you are right, really do.','Буруу: I do believe you are right.'],['Did he really apologise?','Тэр үнэхээр уучлалт гуйсан уу?'],
+ ['I ___ like this song!','do','am','did'],
+ ['I believe you are right, really do.','I do believe you are right.','Emphatic do үндсэн үйл үгийн өмнө орно.'],'really'),
+L(57,'Register & Formality','Хэл ярианы түвшин ба албан ёс','I would be grateful if… · Could you please… · We regret to inform you…',
+ 'Албан бичиг, ярианы хэлний ялгааг ойлгоно. Албан бичигт товчлол, эелдэг илэрхийлэл, бүтэн өгүүлбэр хэрэглэнэ.',
+ [['I would be grateful if you could reply soon.','Удахгүй хариулж өгвөл талархах байна.'],['Could you please send me the details?','Надад дэлгэрэнгүйг илгээж өгөхгүй юу?'],['We regret to inform you that the position is filled.','Уучлаарай, энэ албан тушаал аль хэдийн хаагдсаныг мэдэгдэж байна.']],
+ ['Hey, send me the stuff, okay?','Албан бичигт тохирохгүй, албан бус хэлбэр.'],['Which is more formal: get or obtain?','Аль нь илүү албан ёсны вэ: get эсвэл obtain?'],
+ ['Please ___ the attached form.','complete','fill up','finish off'],
+ ['Hey, send me the stuff, okay?','Kindly send the requested information.','Албан бичигт үгийн сонголт өөр байна.'],'kindly'),
+L(58,'Complex Sentence Structures','Нарийн найрлагатай өгүүлбэр','Although… · Provided that… · Whereas…',
+ 'Хэд хэдэн дэд өгүүлбэрийг нэг өгүүлбэрт нэгтгэнэ. Холбоос үгийн утга (зөрүү, нөхцөл, харьцуулалт) нь санааг илэрхийлнэ.',
+ [['Although it was late, we continued the discussion.','Орой болсон ч бид яриагаа үргэлжлүүлсэн.'],['The project succeeded, provided that the funding continued.','Санхүүжилт үргэлжилсэн нөхцөлд төсөл амжилттай болсон.'],['Whereas John prefers tea, Mary always drinks coffee.','Жон цайг илүүд үздэг бол Мэри үргэлж кофе ууна.']],
+ ['Although it was late, but we continued.','Буруу: although ба but хамт хэрэглэхгүй.'],['What does whereas show?','Whereas юуг илэрхийлдэг вэ?'],
+ ['___ the rain stopped, we went out.','Once','Although','Because'],
+ ['Although it was late, but we continued.','Although it was late, we continued.','Дэд холбоосын дараа давхар but хэрэглэхгүй.'],'although'),
+L(59,'Advanced Sentence Transformations','Дэвшилтэт өгүүлбэр хувиргалт','Despite the rain… · It’s a shame I missed… → I wish I had attended…',
+ 'Ижил утгатай өөр бүтцээр өгүүлбэрийг хэлэх чадварыг хөгжүүлнэ. Утга нь өөрчлөгдөхгүй байх ёстой.',
+ [['Despite the rain, they played on.','Бороо оровч тэд тоглолтоо үргэлжлүүлсэн.'],['In spite of being tired, she finished the race.','Ядарсан ч тэр уралдааныг дуусгасан.'],['It’s a shame I missed the concert. → I wish I had attended the concert.','Концертод очиж чадаагүй нь харамсалтай → Концертод очсон байсан бол гэж хүсэж байна.']],
+ ['Despite the rain, but they played on.','Буруу: but хэрэггүй.'],['Rewrite: She is too young to vote. → She is ___ to vote.','not old enough','young enough not','too old'],
+ ['She is ___ to vote.','not old enough','young enough not','too old'],
+ ['Despite the rain, but they played.','Despite the rain, they played on.','Despite болон but хамт хэрэглэхгүй.'],'despite'),
+L(60,'C2 Final Review','C2 эцсийн нэгтгэл давтлага','Нэгтгэсэн өгүүлбэр: inversion, subjunctive, conditionals, formal register',
+ 'Бүх C2 сэдвийг нэгтгэн давтана. Албан бичиг, эрдэм шинжилгээний хэлэнд зөв, уян хатан хэрэглэх чадвар бэхэжинэ.',
+ [['Had the proposal been approved earlier, the outcome might well have differed.','Санал эрт батлагдсан бол үр дүн өөр байж магадгүй байсан.'],['Rarely does one encounter such an elegant argument.','Ийм гоё нотолгоотой аргумент хааяа л тохиолддог.'],['Were the committee to reconsider, it would doubtless change its view.','Хороо дахин авч үзвэл эргэлзээгүй санаагаа өөрчлөх байсан.']],
+ ['Had the proposal been approved, it might have differ.','Буруу: differed.'],['Choose the most formal option.','Хамгийн албан ёсны сонголтыг сонгоно уу.'],
+ ['The results ___ with expectations.','were consistent','was consistenting','consisted'],
+ ['It might have differ.','It might have differed.','Modal perfect-д participle орно.'],'nevertheless')
+];
+
+/* ============ VOCABULARY (level index 0–5) ============ */
+const VOCAB=[
+['book','ном','n','/bʊk/','I read a book every night.','Би орой бүр ном уншдаг.',0],
+['cat','муур','n','/kæt/','The cat sleeps on the sofa.','Муур диван дээр унтдаг.',0],
+['water','ус','n','/ˈwɔːtər/','Please give me some water.','Надад ус өгөөч.',0],
+['house','байшин','n','/haʊs/','Our house is near the park.','Манай байшин цэцэрлэгт хүрээлэнгийн ойролцоо.',0],
+['family','гэр бүл','n','/ˈfæməli/','My family is very kind.','Миний гэр бүл маш эелдэг.',0],
+['friend','найз','n','/frend/','She is my best friend.','Тэр бол миний хамгийн сайн найз.',0],
+['school','сургууль','n','/skuːl/','I go to school by bus.','Би автобусаар сургуульд явдаг.',0],
+['food','хоол','n','/fuːd/','The food is delicious.','Хоол амттай.',0],
+['morning','өглөө','n','/ˈmɔːrnɪŋ/','Good morning, everyone!','Өглөөний мэнд, бүгдээрээ!',0],
+['city','хот','n','/ˈsɪti/','I live in a big city.','Би том хотод амьдардаг.',0],
+['happy','баяртай','adj','/ˈhæpi/','I am happy today.','Би өнөөдөр баяртай байна.',0],
+['big','том','adj','/bɪɡ/','That is a big dog.','Тэр бол том нохой.',0],
+['small','жижиг','adj','/smɔːl/','This room is small.','Энэ өрөө жижиг.',0],
+['good','сайн','adj','/ɡʊd/','This is a good idea.','Энэ сайн санаа.',0],
+['red','улаан','adj','/red/','She has a red bag.','Тэрд улаан цүнх бий.',0],
+['run','гүйх','v','/rʌn/','I run every morning.','Би өглөө бүр гүйдэг.',0],
+['eat','идэх','v','/iːt/','We eat lunch at noon.','Бид үд дунд хоол иднэ.',0],
+['drink','уух','v','/drɪŋk/','I drink tea at breakfast.','Би өглөөний хоолонд цай уудаг.',0],
+['read','унших','v','/riːd/','He reads the newspaper.','Тэр сонин уншдаг.',0],
+['write','бичих','v','/raɪt/','Please write your name here.','Нэрээ энд бичнэ үү.',0],
+['speak','ярих','v','/spiːk/','Do you speak English?','Та англиар ярьдаг уу?',0],
+['go','явах','v','/ɡoʊ/','I go home at six.','Би зургаан цагт гэртээ явдаг.',0],
+['quickly','хурдан','adv','/ˈkwɪkli/','He answered quickly.','Тэр хурдан хариулсан.',0],
+['always','үргэлж','adv','/ˈɔːlweɪz/','I always smile.','Би үргэлж инээмсэглэдэг.',0],
+['here','энд','adv','/hɪr/','Come here, please.','Энд ирээрэй.',0],
+['today','өнөөдөр','adv','/təˈdeɪ/','Today is Monday.','Өнөөдөр даваа гараг.',0],
+['buy','худалдаж авах','v','/baɪ/','I bought a new phone last week.','Би өнгөрсөн долоо хоногт шинэ утас авсан.',1],
+['travel','аялах','v','/ˈtrævəl/','They travel abroad every summer.','Тэд зун бүр гадаад руу аялдаг.',1],
+['expensive','үнэтэй','adj','/ɪkˈspensɪv/','This jacket is very expensive.','Энэ хүрэм маш үнэтэй.',1],
+['difficult','хэцүү','adj','/ˈdɪfɪkəlt/','The test was difficult.','Шалгалт хэцүү байсан.',1],
+['usually','ихэвчлэн','adv','/ˈjuːʒuəli/','I usually walk to work.','Би ихэвчлэн ажилдаа алхдаг.',1],
+['information','мэдээлэл','n','/ˌɪnfərˈmeɪʃn/','I need more information.','Надад илүү мэдээлэл хэрэгтэй.',1],
+['weather','цаг агаар','n','/ˈweðər/','The weather is nice today.','Өнөөдөр цаг агаар сайхан байна.',1],
+['believe','итгэх','v','/bɪˈliːv/','I believe you.','Би чамд итгэж байна.',1],
+['improve','сайжрах','v','/ɪmˈpruːv/','My English is improving.','Миний англи хэл сайжирч байна.',1],
+['achieve','амжилтанд хүрэх','v','/əˈtʃiːv/','She achieved her goal.','Тэр зорилгодоо хүрсэн.',2],
+['environment','байгаль орчин','n','/ɪnˈvaɪrənmənt/','We must protect the environment.','Бид байгаль орчноо хамгаалах ёстой.',2],
+['opportunity','боломж','n','/ˌɑːpərˈtuːnəti/','This is a great opportunity.','Энэ бол маш сайн боломж.',2],
+['suggest','санал болгох','v','/səˈdʒest/','I suggest a short break.','Би богино амралт авахыг санал болгож байна.',2],
+['recognise','танах','v','/ˈrekəɡnaɪz/','I recognised her voice.','Би түүний дууг таньсан.',2],
+['available','боломжтой','adj','/əˈveɪləbl/','Is the room available?','Өрөө боломжтой юу?',2],
+['advantage','давуу тал','n','/ədˈvæntɪdʒ/','Speaking two languages is an advantage.','Хоёр хэл ярих нь давуу тал юм.',2],
+['confident','итгэлтэй','adj','/ˈkɑːnfɪdənt/','She feels confident now.','Тэр одоо итгэлтэй мэдрэгдэж байна.',2],
+['accomplish','биелүүлэх','v','/əˈkɒmplɪʃ/','They accomplished the task.','Тэд даалгаврыг биелүүлсэн.',3],
+['consequence','үр дагавар','n','/ˈkɒnsɪkwəns/','Every action has a consequence.','Үйл бүр үр дагавартай.',3],
+['appreciate','талархах','v','/əˈpriːʃieɪt/','I really appreciate your help.','Таны тусламжид би үнэхээр талархаж байна.',3],
+['ambiguous','тодорхой бус','adj','/æmˈbɪɡjuəs/','The instructions were ambiguous.','Заавар тодорхой бус байсан.',4],
+['reluctant','дургүйцэх','adj','/rɪˈlʌktənt/','He was reluctant to answer.','Тэр хариулахад дургүйцсэн.',4],
+['meticulous','маш нарийн','adj','/məˈtɪkjələs/','She is meticulous about details.','Тэр нарийн зүйлд маш анхаарал тавьдаг.',5],
+['ubiquitous','бүх газар байдаг','adj','/juːˈbɪkwɪtəs/','Smartphones are ubiquitous now.','Ухаалаг утас одоо бүх газар байна.',5]
+].map(a=>({en:a[0],mn:a[1],pos:a[2],ipa:a[3],ex:a[4],exMn:a[5],l:a[6]}));
+
+/* ============ UTILS ============ */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pick(a,n){return shuffle(a).slice(0,n);}
+const dkey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const dn=()=>Math.floor(Date.now()/864e5);
+const lvThr=lv=>lv==='A1'?85:S.pass;
+function curDay(){for(let d=1;d<=60;d++)if(S.done[d]===undefined)return d;return 60;}
+function unlocked(d){return d===1||S.done[d-1]!==undefined||S.done[d]!==undefined;}
+function touch(){const k=dkey(new Date());if(!S.days.includes(k))S.days.push(k);}
+function streak(){let c=0;const d=new Date();if(!S.days.includes(dkey(d)))d.setDate(d.getDate()-1);while(S.days.includes(dkey(d))){c++;d.setDate(d.getDate()-1);}return c;}
+function todayMins(){return S.mins[dkey(new Date())]||0;}
+function addMins(m,sign){const k=dkey(new Date());S.mins[k]=Math.max(0,(S.mins[k]||0)+sign*m);}
+function srsUpdate(w,ok){const s=S.srs[w]||{box:0,due:0};s.box=ok?Math.min(s.box+1,6):0;const INT=[0,1,3,7,14,30,60];s.due=dn()+(ok?INT[s.box]:0);S.srs[w]=s;}
+function mastered(){return VOCAB.filter(w=>S.srs[w.en]&&S.srs[w.en].box>=4).length;}
+function avgScore(){const v=Object.values(S.best);return v.length?Math.round(v.reduce((a,b)=>a+b,0)/v.length):0;}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),1500);}
+function speakQ(t){if(!('speechSynthesis' in window))return;const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=0.9;speechSynthesis.speak(u);}
+function say(t){if(!('speechSynthesis' in window)){toast('Audio not supported');return;}speechSynthesis.cancel();speakQ(t);}
+function applyTheme(){const dark=S.theme==='dark'||(S.theme==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);document.body.classList.toggle('dark',dark);document.querySelector('meta[name=theme-color]').content=dark?'#0f1220':'#4f46e5';}
+
+/* ============ QUESTIONS ============ */
+function rule(L0){return L0.f+' — '+L0.x;}
+function othersMn(d,idx){return LESSONS.filter(x=>x.d!==d).map(x=>x.q[idx]);}
+function lessonQs(d){
+ const L0=LESSONS[d-1];
+ const enOthers=LESSONS.filter(x=>x.d!==d).map(x=>x.p[0][0]);
+ const enOrder=LESSONS.filter(x=>x.d!==d).map(x=>x.p[1][0]);
+ const qs=[];
+ qs.push({type:'mc',prompt:'Орчуулгыг сонгоно уу: «'+L0.p[0][1]+'»',opts:shuffle([L0.p[0][0],...pick(enOthers,3)]),ans:L0.p[0][0],why:rule(L0)});
+ qs.push({type:'order',prompt:'Үгсийг зөв дарааллаар дарна уу: «'+L0.p[1][1]+'»',words:L0.p[1][0].split(' '),ans:L0.p[1][0],why:rule(L0)});
+ qs.push({type:'mc',prompt:'Хоосон зайг бөглө: '+L0.b[0],opts:shuffle([L0.b[1],L0.b[2],L0.b[3]]),ans:L0.b[1],why:rule(L0)});
+ qs.push({type:'mc',prompt:'Аль өгүүлбэр зөв вэ?',opts:shuffle([L0.fx[0],L0.fx[1]]),ans:L0.fx[1],why:L0.fx[2]});
+ qs.push({type:'mc',prompt:'Энэ өгүүлбэрийн утгыг сонго: «'+L0.q[0]+'»',opts:shuffle([L0.q[1],...pick(othersMn(d,1),3)]),ans:L0.q[1],why:rule(L0)});
+ qs.push({type:'create',prompt:'Түлхүүр үг: "'+L0.k+'" — энэ үгийг ашиглан англи өгүүлбэр бичнэ үү.',key:L0.k,sample:L0.p[0][0],why:'Жишээ: '+L0.p[0][0]});
+ return qs;
+}
+function mixQs(n){
+ let days=Object.keys(S.done).map(Number);if(!days.length)days=[1];
+ let all=[];days.forEach(d=>all.push(...lessonQs(d).filter(q=>q.type==='mc')));
+ return shuffle(all).slice(0,n);
+}
+function levelQs(lv){
+ const days=LESSONS.filter(x=>x.lv===lv).map(x=>x.d);
+ let all=[];days.forEach(d=>all.push(...lessonQs(d).filter(q=>q.type==='mc')));
+ return pick(all,12);
+}
+function vocabQs(n){
+ return pick(VOCAB,n).map(w=>({type:'mc',prompt:w.en+'  '+w.ipa+' — утга нь юу вэ?',opts:shuffle([w.mn,...pick(VOCAB.filter(x=>x!==w).map(x=>x.mn),3)]),ans:w.mn,why:'Жишээ: '+w.ex+' — '+w.exMn,sw:w.en}));
+}
+
+/* ============ QUIZ ENGINE ============ */
+let Q=null, openDay=null, tab='home', vTab='list', vFilter='all', vQ='', card=null, flipped=false;
+function mkQuiz(gen,meta){const q={gen,meta,qs:gen(),i:0,c:0,done:false,fb:null,picked:[],pool:[],pct:0};initQ(q);return q;}
+function initQ(q){
+ const cur=q.qs[q.i];q.picked=[];q.fb=null;
+ q.pool=cur&&cur.type==='order'?shuffle(cur.words).map(w=>({w,used:false})):[];
+}
+function answer(ok,ex){
+ const q=Q.qs[Q.i];
+ Q.fb={ok,pick:ex.pick,why:q.why,ans:q.ans||q.sample};
+ if(ok)Q.c++;
+ if(q.type==='mc'){
+  if(ok){S.wrong=S.wrong.filter(w=>w.prompt!==q.prompt);}
+  else{if(!S.wrong.some(w=>w.prompt===q.prompt)){S.wrong.push({prompt:q.prompt,opts:q.opts,ans:q.ans,why:q.why,sw:q.sw});}if(S.wrong.length>100)S.wrong.shift();}
+ }
+ if(q.sw)srsUpdate(q.sw,ok);
+}
+function qChoose(i){const q=Q.qs[Q.i];if(Q.fb||q.type!=='mc')return;const pick=q.opts[i];answer(pick===q.ans,{pick});}
+function qPick(idx){const q=Q.qs[Q.i];if(Q.fb)return;if(Q.pool[idx].used)return;Q.pool[idx].used=true;Q.picked.push(idx);}
+function qUndo(p){if(Q.fb)return;const idx=Q.picked[p];Q.pool[idx].used=false;Q.picked.splice(p,1);}
+function qCheck(){
+ const q=Q.qs[Q.i];if(Q.fb)return;
+ if(q.type==='order'){const built=Q.picked.map(i=>Q.pool[i].w).join(' ');answer(built===q.ans,{pick:built});}
+ else if(q.type==='create'){const v=(document.getElementById('cin')||{value:''}).value.trim();const ok=v.toLowerCase().includes(q.key.toLowerCase())&&v.split(/\s+/).length>=3;answer(ok,{pick:v});}
+}
+function qNext(){
+ Q.i++;
+ if(Q.i>=Q.qs.length){finishQuiz();}
+ else initQ(Q);
+}
+function finishQuiz(){
+ const q=Q;q.pct=Math.round(q.c/q.qs.length*100);q.done=true;
+ S.log.push({d:q.meta.day||q.meta.mode,pct:q.pct,t:Date.now()});if(S.log.length>200)S.log.shift();
+ if(q.meta.day){
+  const d=q.meta.day;S.best[d]=Math.max(S.best[d]||0,q.pct);
+  if(q.pct>=lvThr(LESSONS[d-1].lv)){S.done[d]=Math.max(S.done[d]||0,q.pct);}
+  touch();
+ }else touch();
+}
+
+/* ============ TASKS ============ */
+function toggleTask(d,k){
+ S.tasks[d]=S.tasks[d]||{};const t=TASKS.find(x=>x.k===k);
+ const v=!S.tasks[d][k];S.tasks[d][k]=v;
+ if(t)addMins(t.m,v?1:-1);
+ if(v)touch();
+}
+function playAll(d){if(!('speechSynthesis' in window)){toast('Audio not supported');return;}speechSynthesis.cancel();LESSONS[d-1].p.forEach(p=>speakQ(p[0]));}
+function nextCard(){const dw=dueWords();card=dw.length?dw[Math.floor(Math.random()*dw.length)]:null;flipped=false;}
+function dueWords(){
+ return VOCAB.filter(w=>{
+  if(vFilter==='fav')return S.fav.includes(w.en)&&(!S.srs[w.en]||S.srs[w.en].due<=dn());
+  if(vFilter!=='all'&&String(w.l)!==vFilter)return false;
+  return !S.srs[w.en]||S.srs[w.en].due<=dn();
+ });
+}
+
+/* ============ VIEWS ============ */
+function homeV(){
+ const d=curDay(),done=Object.keys(S.done).length,L0=LESSONS[d-1];
+ const tm=todayMins();
+ return `
+ <div class="card hero">
+  <div class="row between"><span class="pill" style="background:rgba(255,255,255,.2);color:#fff">${tr('level')} ${L0.lv}</span><span class="sm">${tr('dayN')} ${d}/60</span></div>
+  <h2 style="color:#fff">${tr('welcome')}</h2>
+  <div class="bar" style="background:rgba(255,255,255,.3)"><i style="width:${Math.round(done/60*100)}%"></i></div>
+  <div class="sm">${done}/60 ${tr('total').toLowerCase()}</div>
+ </div>
+ <div class="card">
+  <div class="mut sm">${tr('today')}</div>
+  <h3 style="margin:4px 0">${esc(L0.en)}</h3>
+  <div class="mut">${esc(L0.mn)}</div>
+  <button class="btn" data-act="open" data-d="${d}">${tr('cont')}</button>
+ </div>
+ <div class="grid2">
+  <div class="stat"><div class="mut sm">${tr('time')}</div><div class="v">${tm} ${tr('mins')}</div><div class="bar"><i style="width:${Math.min(100,Math.round(tm/240*100))}%"></i></div><div class="mut sm">${tr('goal')}</div></div>
+  <div class="stat"><div class="mut sm">${tr('total')}</div><div class="v">${done}</div></div>
+  <div class="stat"><div class="mut sm">${tr('gram')}</div><div class="v">${Math.round(done/60*100)}%</div></div>
+  <div class="stat"><div class="mut sm">${tr('vocP')}</div><div class="v">${Math.round(mastered()/VOCAB.length*100)}%</div></div>
+  <div class="stat"><div class="mut sm">${tr('avg')}</div><div class="v">${avgScore()}%</div></div>
+  <div class="stat"><div class="mut sm">${tr('streak')}</div><div class="v">🔥 ${streak()} ${tr('days')}</div></div>
+ </div>`;
+}
+function lessonsV(){
+ const cd=curDay();let h='';
+ LEVELS.forEach(lv=>{
+  h+=`<h3 class="mut">${lv}</h3>`;
+  LESSONS.filter(x=>x.lv===lv).forEach(x=>{
+   const ok=unlocked(x.d),dn2=S.done[x.d]!==undefined;
+   const cls=dn2?'d':(x.d===cd?'c':'');
+   h+=`<button class="row-item ${ok?'':'lk'}" ${ok?`data-act="open" data-d="${x.d}"`:'disabled'}>
+    <span class="num ${cls}">${dn2?'✓':x.d}</span>
+    <span style="flex:1"><b>${esc(x.en)}</b><br><span class="mut sm">${esc(x.mn)}</span></span>
+    <span class="sm mut">${dn2?S.done[x.d]+'%':(ok?'':'🔒')}</span></button>`;
+  });
+ });
+ return h;
+}
+function lessonHTML(d){
+ const L0=LESSONS[d-1],st=S.tasks[d]||{},sc=S.done[d];
+ const pairs=arr=>arr.map(([e,m])=>`<div class="ex"><div class="exrow"><b>${esc(e)}</b><button class="sp" data-act="say" data-t="${esc(e)}">🔊</button></div><div class="mut sm">${esc(m)}</div></div>`).join('');
+ const tasksH=TASKS.map(t=>`<div class="task"><div><b>${esc(tn(t))}</b><div class="mut sm">${t.m} ${tr('mins')}</div></div><button class="chk ${st[t.k]?'on':''}" data-act="task" data-k="${t.k}">${st[t.k]?'✓':''}</button></div>`).join('');
+ const prevOk=d>1,nextOk=d<60&&unlocked(d+1);
+ return `
+ <div class="row between">
+  <button class="btn alt sm" data-act="back">‹ ${tr('back')}</button>
+  <span class="pill">${L0.lv} · ${tr('dayN')} ${d}/60</span>
+ </div>
+ <h2>${esc(L0.en)}</h2>
+ <div class="mut">${esc(L0.mn)}</div>
+ ${sc!==undefined?`<div class="pill" style="margin-top:6px;background:rgba(22,163,74,.2)">✓ ${tr('done')} · ${sc}%</div>`:''}
+
+ <div class="card" style="margin-top:12px"><h3>${tr('formula')}</h3><div class="formula">${esc(L0.f)}</div></div>
+ <div class="card"><h3>${tr('expl')}</h3><p style="line-height:1.6;margin:0">${esc(L0.x)}</p></div>
+ <div class="card"><h3>${tr('exs')}</h3>${pairs(L0.p)}<button class="btn alt" data-act="sayAll" data-d="${d}">🔊 ${tr('sayAll')}</button></div>
+ <div class="card"><h3>${tr('negs')}</h3>${pairs([L0.n])}</div>
+ <div class="card"><h3>${tr('ques')}</h3>${pairs([L0.q])}</div>
+ <div class="card"><h3>${tr('mist')}</h3>
+  <div class="ex"><div class="mut sm">✗ ${esc(L0.fx[0])}</div><div>✓ <b>${esc(L0.fx[1])}</b></div><div class="mut sm">${esc(L0.fx[2])}</div></div>
+ </div>
+
+ <div class="card"><h3>${tr('tasks')}</h3>${tasksH}
+  <div class="ex" style="margin-top:8px"><div class="mut sm">${tr('writeT')}</div>
+   <textarea id="wtxt" placeholder="${esc(tr('writeHint'))}">${esc(S.writing[d]||'')}</textarea>
+   <button class="btn alt" data-act="saveWrite" data-d="${d}">${tr('save')}</button>
+  </div>
+ </div>
+
+ <div class="card"><h3>${tr('quiz')}</h3>
+  <div class="mut sm">${tr('pass')}: ${lvThr(L0.lv)}% · ${tr('pct')}</div>
+  <button class="btn" data-act="start" data-d="${d}">${tr('start')}</button>
+ </div>
+
+ <div class="row between">
+  <button class="btn alt sm" data-act="open" data-d="${d-1}" ${prevOk?'':'disabled'}>‹ ${tr('prevDay')}</button>
+  <button class="btn alt sm" data-act="open" data-d="${d+1}" ${nextOk?'':'disabled'}>${tr('nextDay')} ›</button>
+ </div>`;
+}
+function quizHTML(){
+ const q=Q;
+ if(q.done){
+  const thr=q.meta.day?lvThr(LESSONS[q.meta.day-1].lv):S.pass;const ok=q.pct>=thr;
+  return `<div class="card center"><div class="big">${q.pct}%</div><h3>${ok?'🎉 '+tr('ok'):'💪 '+tr('tryAgain')}</h3>
+   <p class="mut">${q.c}/${q.qs.length} · ${tr('pass')}: ${thr}%</p>
+   ${q.meta.day&&ok?`<button class="btn" data-act="back">${tr('back')}</button>`:''}
+   <button class="btn alt" data-act="retryQ">${tr('retry')}</button>
+   <button class="btn alt" data-act="exitQ">${tr('exit')}</button></div>`;
+ }
+ const qq=q.qs[q.i];let body='';
+ if(qq.type==='mc'){
+  body=qq.opts.map((o,idx)=>{let c='opt';if(q.fb){if(o===qq.ans)c+=' ok';else if(o===q.fb.pick)c+=' bad';}return `<button class="${c}" ${q.fb?'disabled':''} data-act="qopt" data-i="${idx}">${esc(o)}</button>`;}).join('');
+ }else if(qq.type==='order'){
+  body=`<div class="build">${q.picked.map((idx,p)=>`<button class="chip" ${q.fb?'disabled':''} data-act="qundo" data-i="${p}">${esc(q.pool[idx].w)}</button>`).join('')||`<span class="mut sm">${tr('pick')}</span>`}</div>
+  <div>${q.pool.map((c,idx)=>c.used?'':`<button class="chip alt" ${q.fb?'disabled':''} data-act="qpick" data-i="${idx}">${esc(c.w)}</button>`).join('')}</div>
+  ${!q.fb?`<button class="btn" ${q.picked.length<q.pool.length?'disabled':''} data-act="qcheck">${tr('check')}</button>`:''}`;
+ }else if(qq.type==='create'){
+  body=`<textarea id="cin" ${q.fb?'disabled':''} placeholder="${esc(tr('writeHint'))}">${esc(q.fb?(q.fb.pick||''):'')}</textarea>
+  ${!q.fb?`<button class="btn" data-act="qcheck">${tr('check')}</button>`:''}`;
+ }
+ let fb='';
+ if(q.fb){
+  fb=`<div class="fb ${q.fb.ok?'good':'bad'}"><b>${q.fb.ok?'✓ '+tr('correct'):'✗ '+tr('wrongA')}</b>
+   ${!q.fb.ok&&q.fb.ans?`<div class="sm" style="margin-top:6px">${tr('rightAns')}: <b>${esc(q.fb.ans)}</b></div>`:''}
+   <div class="sm mut" style="margin-top:6px">${esc(q.fb.why||'')}</div></div>
+   <button class="btn" data-act="qnext">${q.i+1>=q.qs.length?tr('finish'):tr('next')}</button>`;
+ }
+ return `<div class="row between"><button class="btn alt sm" data-act="exitQ">‹ ${tr('exit')}</button><span class="pill">${q.i+1}/${q.qs.length}</span></div>
+  <div class="bar"><i style="width:${Math.round(q.i/q.qs.length*100)}%"></i></div>
+  <div class="card"><h3 style="margin-top:0">${esc(qq.prompt)}</h3>${body}${fb}</div>`;
+}
+function vocabListHTML(){
+ const q=vQ.trim().toLowerCase();
+ const list=VOCAB.filter(w=>{
+  if(vFilter==='fav'&&!S.fav.includes(w.en))return false;
+  if(vFilter!=='all'&&vFilter!=='fav'&&String(w.l)!==vFilter)return false;
+  if(q&&!(w.en.includes(q)||w.mn.includes(q)))return false;
+  return true;
+ });
+ if(!list.length)return `<div class="mut center">—</div>`;
+ return list.map(w=>`<details class="card" style="padding:10px 14px;margin-bottom:8px">
+  <summary style="justify-content:space-between;width:100%"><span><b>${esc(w.en)}</b> <span class="mut sm">${esc(w.ipa)}</span></span><span class="pill">${LEVELS[w.l]}</span></summary>
+  <div class="row" style="margin-top:6px;justify-content:space-between"><div>${esc(w.mn)} <span class="mut sm">(${POS[w.pos]||w.pos})</span></div>
+  <div class="row"><button class="sp" data-act="say" data-t="${esc(w.en)}">🔊</button>
+  <button class="sp" data-act="fav" data-w="${esc(w.en)}">${S.fav.includes(w.en)?'★':'☆'}</button></div></div>
+  <div class="ex mut sm" style="border:0">${esc(w.ex)}<br>${esc(w.exMn)}</div>
+ </details>`).join('');
+}
+function vocabV(){
+ const filters=[['all',tr('all')],...LEVELS.map((l,i)=>[String(i),l]),['fav',tr('fav')]];
+ let h=`<div class="seg">${[['list',tr('list')],['cards',tr('cards')]].map(([k,l])=>`<button class="${vTab===k?'on':''}" data-act="vtab" data-v="${k}">${l}</button>`).join('')}</div>`;
+ h+=`<div class="seg">${filters.map(([k,l])=>`<button class="${vFilter===k?'on':''}" data-act="vfilter" data-v="${k}">${l}</button>`).join('')}</div>`;
+ if(vTab==='list'){
+  h+=`<input id="vsearch" placeholder="${esc(tr('search'))}" value="${esc(vQ)}" style="margin:8px 0">
+   <div class="mut sm" style="margin:6px 0">${VOCAB.length} words · ${tr('vmas')}: ${mastered()}</div><div id="vlist">${vocabListHTML()}</div>`;
+ }else{
+  if(!card&&!flipped)nextCard();
+  if(!card){h+=`<div class="card center">${tr('cardsDone')}</div>`;}
+  else{
+   const w=card;
+   h+=`<div class="card flashcard" data-act="flip">`+(flipped
+    ?`<div class="big">${esc(w.mn)}</div><div class="mut">${esc(w.ipa)}</div><p>${esc(w.ex)}</p><p class="mut sm">${esc(w.exMn)}</p>`
+    :`<div class="big">${esc(w.en)}</div><div class="mut">${esc(w.ipa)}</div><button class="sp" data-act="say" data-t="${esc(w.en)}">🔊</button><div class="mut sm" style="margin-top:8px">${tr('flip')}</div>`)+`</div>
+    <div class="row"><button class="btn alt" data-act="rate" data-ok="0">${tr('again')}</button><button class="btn" data-act="rate" data-ok="1">${tr('know')}</button></div>`;
+  }
+ }
+ return h;
+}
+function practiceV(){
+ const doneDays=Object.keys(S.done).length;
+ const cd=curDay();
+ const weak=[];const seen=new Set();
+ S.log.slice().reverse().forEach(e=>{if(typeof e.d==='number'&&!seen.has(e.d)){seen.add(e.d);if(e.pct<lvThr(LESSONS[e.d-1].lv))weak.push(e.d);}});
+ let h=`<div class="card"><h3>${tr('quiz')}</h3>
+  <button class="btn" data-act="open" data-d="${cd}">${tr('today')}</button>
+  <button class="btn alt" data-act="mix" ${doneDays?'':'disabled'}>${tr('mixTitle')}</button>
+  <div class="mut sm">${doneDays?'':tr('noRecent')}</div>
+  <button class="btn alt" data-act="vq">${tr('vqTitle')}</button>
+ </div>`;
+ h+=`<div class="card"><h3>${tr('lvl')}</h3>`;
+ LEVELS.forEach(lv=>{
+  const days=LESSONS.filter(x=>x.lv===lv).map(x=>x.d);
+  const c=days.filter(d=>S.done[d]!==undefined).length;
+  const can=c===10;
+  h+=`<div class="row between" style="padding:6px 0"><span><b>${lv}</b> <span class="mut sm">${c}/10</span></span>
+   <button class="btn sm" ${can?`data-act="lvl" data-lv="${lv}"`:'disabled'}>${can?tr('start'):tr('lvlNeed')}</button></div>`;
+ });
+ h+=`</div>`;
+ h+=`<div class="card"><h3>${tr('weak')}</h3>${weak.length?weak.slice(0,6).map(d=>`<button class="row-item" data-act="open" data-d="${d}"><span class="num">${d}</span><span>${esc(LESSONS[d-1].en)}</span></button>`).join(''):`<div class="mut sm">—</div>`}</div>`;
+ h+=`<div class="card"><h3>${tr('wrong')}</h3>${S.wrong.length?`<button class="btn" data-act="replay">${tr('wrong')} (${S.wrong.length})</button>`:`<div class="mut sm">${tr('noneWrong')}</div>`}</div>`;
+ return h;
+}
+function progressV(){
+ const done=Object.keys(S.done).length,cd=curDay();
+ const b=[
+  ['🎯 '+(tr('done')),done>=1,'1+'],
+  ['📚 10',done>=10,'10'],
+  ['🏅 A1',LESSONS.filter(x=>x.lv==='A1').every(x=>S.done[x.d]!==undefined),'A1'],
+  ['🔥 3',streak()>=3,'3'],
+  ['💯',S.log.some(e=>e.pct===100),'100%'],
+  ['🔤 20',mastered()>=20,'20'],
+  ['🏆 30',done>=30,'30'],
+  ['👑 60',done>=60,'60']];
+ let h=`<div class="card"><h3>${tr('levels')}</h3>${LEVELS.map(lv=>{const days=LESSONS.filter(x=>x.lv===lv).map(x=>x.d);const c=days.filter(d=>S.done[d]!==undefined).length;return `<div class="sm" style="margin:6px 0"><b>${lv}</b> · ${c}/10</div><div class="bar"><i style="width:${c*10}%"></i></div>`;}).join('')}</div>`;
+ h+=`<div class="card"><h3>${tr('cal')}</h3><div class="cal">${LESSONS.map(x=>{const dd=S.done[x.d]!==undefined,cur=x.d===cd&&!dd,lock=!unlocked(x.d);return `<button class="${dd?'d':''} ${cur?'c':''} ${lock?'l':''}" ${lock?'disabled':''} data-act="open" data-d="${x.d}">${x.d}</button>`;}).join('')}</div></div>`;
+ h+=`<div class="card"><h3>${tr('badges')}</h3><div class="badges">${b.map(([n,on])=>`<div class="badge ${on?'on':''}">${n} ${on?'✓':'🔒'}</div>`).join('')}</div></div>`;
+ h+=`<div class="card"><h3>${tr('recent')}</h3>${S.log.length?S.log.slice(-8).reverse().map(e=>`<div class="row between sm" style="padding:4px 0"><span>${typeof e.d==='number'?esc(LESSONS[e.d-1].en):esc(e.d)}</span><b>${e.pct}%</b></div>`).join(''):`<div class="mut sm">${tr('noRecent')}</div>`}</div>`;
+ h+=`<div class="card"><div class="grid2"><div class="stat"><div class="mut sm">${tr('vmas')}</div><div class="v">${mastered()}/${VOCAB.length}</div></div><div class="stat"><div class="mut sm">${tr('avg')}</div><div class="v">${avgScore()}%</div></div></div></div>`;
+ return h;
+}
+function settingsV(){
+ return `<div class="card"><h3>${tr('lang')}</h3>
+   <div class="seg"><button class="${S.lang==='mn'?'on':''}" data-act="set" data-k="lang" data-v="mn">Монгол</button><button class="${S.lang==='en'?'on':''}" data-act="set" data-k="lang" data-v="en">English</button></div></div>
+  <div class="card"><h3>${tr('theme')}</h3>
+   <div class="seg">${[['auto',tr('auto')],['light',tr('light')],['dark',tr('dark')]].map(([k,l])=>`<button class="${S.theme===k?'on':''}" data-act="set" data-k="theme" data-v="${k}">${l}</button>`).join('')}</div></div>
+  <div class="card"><h3>${tr('pass')}</h3><div class="mut sm">A1: 85% · B1+</div>
+   <div class="seg">${[60,70,80,85].map(v=>`<button class="${S.pass===v?'on':''}" data-act="set" data-k="pass" data-v="${v}">${v}%</button>`).join('')}</div></div>
+  <div class="card"><h3>${tr('install')}</h3><p class="sm mut">${tr('installT')}</p></div>
+  <div class="card"><button class="btn" style="background:#dc2626" data-act="reset">${tr('reset')}</button></div>`;
+}
+
+/* ============ RENDER & ACTIONS ============ */
+function render(){
+ applyTheme();
+ $('#langBtn').textContent=S.lang==='mn'?'EN':'МН';
+ document.querySelectorAll('nav [data-l]').forEach(s=>s.textContent=tr(s.dataset.l));
+ document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab&&!openDay&&!Q));
+ const v=$('#view');
+ if(Q){v.innerHTML=quizHTML();return;}
+ if(openDay){v.innerHTML=lessonHTML(openDay);return;}
+ const map={home:homeV,lessons:lessonsV,vocab:vocabV,practice:practiceV,progress:progressV,settings:settingsV};
+ v.innerHTML=map[tab]();
+ v.scrollTop=0;
+}
+function act(a,d){
+ switch(a){
+  case 'tab':tab=d.t;openDay=null;Q=null;break;
+  case 'open':{const n=+d.d;if(n>=1&&n<=60&&unlocked(n)){openDay=n;Q=null;tab='lessons';}break;}
+  case 'back':openDay=null;Q=null;break;
+  case 'start':Q=mkQuiz(()=>lessonQs(+d.d),{day:+d.d});break;
+  case 'retryQ':Q=mkQuiz(Q.gen,Q.meta);break;
+  case 'exitQ':Q=null;break;
+  case 'qopt':qChoose(+d.i);break;
+  case 'qpick':qPick(+d.i);break;
+  case 'qundo':qUndo(+d.i);break;
+  case 'qcheck':qCheck();break;
+  case 'qnext':qNext();break;
+  case 'mix':Q=mkQuiz(()=>mixQs(10),{mode:'mix'});break;
+  case 'lvl':Q=mkQuiz(()=>levelQs(d.lv),{mode:'lvl'});break;
+  case 'vq':Q=mkQuiz(()=>vocabQs(10),{mode:'vq'});break;
+  case 'replay':Q=mkQuiz(()=>S.wrong.slice(0,10).map(w=>({type:'mc',...w})),{mode:'replay'});break;
+  case 'task':toggleTask(openDay,d.k);break;
+  case 'sayAll':playAll(+d.d);break;
+  case 'say':say(d.t);break;
+  case 'saveWrite':{const el=$('#wtxt');if(el){S.writing[+d.d]=el.value;touch();toast(tr('saved'));}break;}
+  case 'fav':{const i=S.fav.indexOf(d.w);if(i>=0)S.fav.splice(i,1);else S.fav.push(d.w);break;}
+  case 'vtab':vTab=d.v;if(d.v==='cards')nextCard();break;
+  case 'vfilter':vFilter=d.v;nextCard();break;
+  case 'flip':flipped=!flipped;break;
+  case 'rate':{if(card){srsUpdate(card.en,d.ok==='1');}nextCard();break;}
+  case 'set':{S[d.k]=d.k==='pass'?+d.v:d.v;break;}
+  case 'reset':if(confirm(tr('reset')+'?')){localStorage.removeItem(KEY);S=JSON.parse(JSON.stringify(DEF));openDay=null;Q=null;toast(tr('resetOk'));}break;
+  case 'lang':S.lang=S.lang==='mn'?'en':'mn';break;
+ }
+ save();render();
+}
+document.addEventListener('click',e=>{
+ const el=e.target.closest('[data-act]');
+ if(!el||el.disabled)return;
+ act(el.dataset.act,el.dataset);
+});
+document.addEventListener('input',e=>{
+ if(e.target.id==='vsearch'){vQ=e.target.value;const l=$('#vlist');if(l)l.innerHTML=vocabListHTML();}
+});
+if(window.matchMedia){matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',()=>{applyTheme();});}
+
+/* ============ INIT ============ */
+render();
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+</script>
+</body>
+</html>
